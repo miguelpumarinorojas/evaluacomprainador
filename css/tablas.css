@@ -1,0 +1,48 @@
+.tablas {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	border-style: double;
+}
+
+.encabezados {
+	font-family: "Century Gothic";
+	font-size: 18px;
+	font-weight: bold;
+	text-align: left;
+	color: black;
+}
+.encabezados1 {
+	font-family: "Century Gothic";
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+	color: black;
+}
+
+
+
+.textbox {
+	text-align: right;
+}
+.boton1 {
+	background-image: url(save3.jpg);
+}
+.boton2 {
+	background-image: url(refresh.png);
+}
+.textoboton {
+	text-align: center;
+}
+.historicod {
+	font-size: 10px;
+	text-align: center;
+}
+.historicoe {
+	font-size: 12px;
+	font-weight: bold;
+}
+.historicoi {
+	font-size: 13px;
+	font-weight: bold;
+}
+

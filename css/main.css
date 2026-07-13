@@ -1,0 +1,40 @@
+.pacifico{
+	font-family: 'Pacifico', cursive;
+
+}
+.Garamond{
+	font-family: 'Cormorant Garamond', serif;
+	
+}
+.Cinzel{
+	font-family: 'Cinzel', serif;
+	
+}
+
+.espacio-titulos{
+	margin-left: 2em;
+	text-align: left;
+	margin-right: 4em;
+}
+.espacio-tablas{
+	margin-left: 4em;
+	margin-right: 8em;
+}
+img{
+	max-width: 150px;
+}
+.poiret{
+	font-family: 'Poiret One', cursive;
+}
+.encabezado-columnas{
+	font-weight: bolder;
+	text-align: center;
+}
+.boton1{
+	background-image: url(refresh.png);
+
+}
+.boton2{
+	background-image: url(save3.png);
+}
+
