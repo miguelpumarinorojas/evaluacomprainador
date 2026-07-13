@@ -140,9 +140,8 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label for="fechaCotizacion" class="form-label"><span class="material-icons align-bottom">calendar_today</span> Fecha</label>
-                                        <input type="date" class="form-control" id="fechaCotizacion" name="fechaCotizacion" value="<?php 
-                                            if (!empty($fechaPersist)) {
-                                                $fecha = DateTime::createFromFormat('d-m-Y', $fechaPersist);
+                                        <input type="date" class="form-control" id="fechaCotizacion" name="fechaCotizacion" 
+                                        value="<?php  if (!empty($fechaPersist)) {$fecha = DateTime::createFromFormat('d-m-Y', $fechaPersist);
                                                 if ($fecha instanceof DateTime) {
                                                     echo $fecha->format('Y-m-d');
                                                 } else {

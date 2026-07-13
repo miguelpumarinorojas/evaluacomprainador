@@ -11,9 +11,9 @@ $filasGeneradas = [];
     <thead class="table-dark sticky-top">
         <tr>
             <th width="5" class="text-center">Supermercado</th>
-            <th width="150">Fecha Creación</th>
-            <th width="150">Fecha Cotización</th>
-            <th width="75">Eliminar</th>
+            <th width="300">Fecha Creación</th>
+            <th width="300">Fecha Cotización</th>
+            <th width="5">Eliminar</th>
         </tr>
     </thead>
     <tbody>
@@ -43,8 +43,8 @@ $filasGeneradas = [];
                         <form method="POST" action="eliminarListaDeCompras.php" onsubmit="return confirm('¿Está seguro de eliminar esta lista de compras?. Esto es irreversible.');">
                             <input type="hidden" name="mes_compra" value="<?php echo htmlspecialchars($row_ppal['mes_compra']); ?>">
                             <input type="hidden" name="supermercado" value="<?php echo htmlspecialchars($row_ppal['id_supermercado']); ?>">
-                            <button type="submit" class="btn btn-danger btn-sm" name="btnEliminar">
-                                <span class="material-icons align-bottom">delete</span> Eliminar
+                            <button type="submit" class="btn btn-outline-danger btn-sm" name="btnEliminar">
+                                <span class="material-icons align-bottom">delete_forever</span>
                             </button>
                         </form>
                 </tr>
@@ -58,96 +58,3 @@ $filasGeneradas = [];
         ?>
     </tbody>
 </table>
-
-<script src="../js/calcularPrecio.js"></script>
-<script>
-    async function guardarFilaCotizacion(fila) {
-        const mesCompra = fila.dataset.mesCompra;
-        const producto = fila.dataset.producto;
-        const supermercado = fila.dataset.supermercado;
-        const umInput = fila.querySelector('select[name="UM"]');
-        const marcaInput = fila.querySelector('select[name="marca"]');
-        const capacidadInput = fila.querySelector('input[name="capacidad"]');
-        const precioInput = fila.querySelector('input[name="precio"]');
-        const precioPorUmInput = fila.querySelector('input[name="precioporum"]');
-
-        if (!mesCompra || !producto || !supermercado) {
-            return;
-        }
-
-        const payload = new URLSearchParams({
-            mes_compra: mesCompra,
-            producto: producto,
-            supermercado: supermercado,
-            um: umInput ? umInput.value : '',
-            marca: marcaInput ? marcaInput.value : '',
-            capacidad: capacidadInput ? capacidadInput.value : '',
-            precio: precioInput ? precioInput.value : '',
-            precio_por_um: precioPorUmInput ? precioPorUmInput.value : ''
-        });
-
-        try {
-            const response = await fetch('actualizarCotizacionMensual.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-                },
-                body: payload.toString()
-            });
-
-            if (!response.ok) {
-                throw new Error('Error HTTP ' + response.status);
-            }
-
-            const resultado = await response.json();
-            if (!resultado.success) {
-                console.error(resultado.message || 'No fue posible guardar la fila');
-            }
-        } catch (error) {
-            console.error('Error al guardar la cotización:', error);
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Inicializar cálculo de precio para cada fila generada
-        const filasGeneradas = <?php echo json_encode($filasGeneradas); ?>;
-        filasGeneradas.forEach(function(numero) {
-            inicializarCalculoPrecioFila('fila_' + numero + '_');
-        });
-
-        document.querySelectorAll('tbody tr[data-mes-compra]').forEach(function(fila) {
-            const capacidadInput = fila.querySelector('input[name="capacidad"]');
-            const precioInput = fila.querySelector('input[name="precio"]');
-            const umInput = fila.querySelector('select[name="UM"]');
-            const marcaInput = fila.querySelector('select[name="marca"]');
-
-            if (capacidadInput) {
-                ['input', 'change'].forEach(function(evento) {
-                    capacidadInput.addEventListener(evento, function() {
-                        guardarFilaCotizacion(fila);
-                    });
-                });
-            }
-
-            if (precioInput) {
-                ['input', 'change'].forEach(function(evento) {
-                    precioInput.addEventListener(evento, function() {
-                        guardarFilaCotizacion(fila);
-                    });
-                });
-            }
-
-            if (umInput) {
-                umInput.addEventListener('change', function() {
-                    guardarFilaCotizacion(fila);
-                });
-            }
-
-            if (marcaInput) {
-                marcaInput.addEventListener('change', function() {
-                    guardarFilaCotizacion(fila);
-                });
-            }
-        });
-    });
-</script>
