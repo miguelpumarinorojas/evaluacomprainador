@@ -6,7 +6,7 @@ include("../../inc/connection.php");
 
 
 <table class="table table-striped table-hover table-bordered table-sm table-responsive">
-    <thead class="table-dark">
+    <thead class="table-dark sticky-top">
         <tr>
             <th width="50">N°</th>
             <th width="200">Codigo</th>
