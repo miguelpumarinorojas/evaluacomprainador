@@ -27,7 +27,8 @@ include("../../inc/connection.php");
                     <td><?php echo $row['descripcion']; ?></td>
                     <td>
                         <!-- <a href="editarSupermercado.php?id=<?php //echo $row['id']; ?>" class="btn btn-success btn-sm"><span class="material-icons align-bottom">edit</span></a> -->
-                        <a href="eliminarsupermercado.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" title="Presione para eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar este supermercado?');"><span class="material-icons align-bottom">delete</span></a>
+                        <button href="eliminarsupermercado.php?id=<?php echo $row['id']; ?>" class="btn text-danger" title="Presione para eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar este supermercado?');"><span class="material-symbols-outlined align-bottom">delete</span>
+                        </button>
                     </td>
                 </tr>
             <?php }

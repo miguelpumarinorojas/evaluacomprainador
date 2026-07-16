@@ -76,8 +76,8 @@ $filasGeneradas = [];
                     <td>
                         <form method="POST" action="eliminarProductoListaCompras.php" onsubmit="return confirm('¿Está seguro de eliminar este producto?. Esto es irreversible.');">
                             <input type="hidden" name="id" value="<?php echo htmlspecialchars($row_ppal['id']); ?>">
-                            <button type="submit" class="btn btn-outline-danger btn-sm" name="btnEliminar">
-                                <span class="material-icons align-bottom">delete</span>
+                            <button type="submit" class="btn text-danger" name="btnEliminar">
+                                <span class="material-symbols-outlined align-bottom">delete</span>
                             </button>
                         </form>
                     </td>

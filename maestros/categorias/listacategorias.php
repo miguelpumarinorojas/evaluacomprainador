@@ -6,7 +6,7 @@ include("../../inc/connection.php");
 
 
 <table class="table table-striped table-hover table-bordered table-sm table-responsive">
-    <thead class="table-dark">
+    <thead class="table-dark stycky-top">
         <tr>
             <th width="50">N°</th>
             <th width="200">Codigo</th>
@@ -30,7 +30,8 @@ include("../../inc/connection.php");
                     <td>
                         <!-- <a href="editarCategoria.php?id=<?php //echo $row['id']; 
                                                                 ?>" class="btn btn-success btn-sm"><span class="material-icons align-bottom">edit</span></a> -->
-                        <a href="eliminarcategoria.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" title="Presione para eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta categoría?');"><span class="material-icons align-bottom">delete</span></a>
+                        <button href="eliminarcategoria.php?id=<?php echo $row['id']; ?>" class="btn text-danger" title="Presione para eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta categoría?');"><span class="material-symbols-outlined align-bottom">delete</span>
+                        </button>
                     </td>
                 </tr>
             <?php }

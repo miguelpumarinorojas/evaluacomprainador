@@ -34,7 +34,8 @@ include("../../inc/connection.php");
                     <td><span class="material-symbols-outlined align-bottom"><?php echo $row['icono_categoria']; ?></span> <?php echo $row['descripcion_categoria']; ?></td>
                     <td>
                         <!-- <a href="editarProducto.php?id=<?php //echo $row['id']; ?>" class="btn btn-success btn-sm"><span class="material-icons align-bottom">edit</span></a> -->
-                        <a href="eliminarproducto.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" title="Presione para eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');"><span class="material-icons align-bottom">delete</span></a>
+                        <button href="eliminarproducto.php?id=<?php echo $row['id']; ?>" class="btn text-danger" title="Presione para eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');"><span class="material-symbols-outlined align-bottom">delete</span>
+                        </button>
                     </td>
                 </tr>
             <?php }

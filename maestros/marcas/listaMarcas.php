@@ -28,7 +28,8 @@ include("../../inc/connection.php");
                     <td>
                         <!-- <a href="editarUnidad.php?id=<?php //echo $row['id']; 
                                                             ?>" class="btn btn-success btn-sm"><span class="material-icons align-bottom">edit</span></a> -->
-                        <a href="eliminarmarca.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" title="Presione para eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta marca?');"><span class="material-icons align-bottom">delete</span></a>
+                        <button href="eliminarmarca.php?id=<?php echo $row['id']; ?>" class="btn text-danger" title="Presione para eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta marca?');"><span class="material-symbols-outlined align-bottom">delete</span>
+                        </button>
                     </td>
                 </tr>
             <?php }
