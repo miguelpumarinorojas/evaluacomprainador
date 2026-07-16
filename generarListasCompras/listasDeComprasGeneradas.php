@@ -10,10 +10,10 @@ $filasGeneradas = [];
 <table class="table table-striped table-hover table-bordered table-sm table-responsive">
     <thead class="table-dark sticky-top">
         <tr>
-            <th width="5" class="text-center">Supermercado</th>
-            <th width="300">Fecha Creación</th>
-            <th width="300">Fecha Cotización</th>
-            <th width="300">Productos Cotizados</th>
+            <th class="text-center">Supermercado</th>
+            <th>Fecha Creación</th>
+            <th>Mes-Año</th>
+            <th>Productos Cotizados</th>
             <th width="5">Eliminar</th>
         </tr>
     </thead>
@@ -44,14 +44,14 @@ $filasGeneradas = [];
                         </a>
                     </td>
                     <td><?php echo formatoFechaHoraDMY($row_ppal['fecha_creacion']); ?></td>
-                    <td><?php echo formatoFechaDMY($row_ppal['mes_compra']); ?></td>
+                    <td><?php echo formatoMesAño($row_ppal['mes_compra']); ?></td>
                     <td><?php echo $row_ppal['productos_cotizados']; ?> de <?php echo $row_ppal['productos_total']; ?></td>
                     <td>
                         <form method="POST" action="eliminarListaDeCompras.php" onsubmit="return confirm('¿Está seguro de eliminar esta lista de compras?. Esto es irreversible.');">
                             <input type="hidden" name="mes_compra" value="<?php echo htmlspecialchars($row_ppal['mes_compra']); ?>">
                             <input type="hidden" name="supermercado" value="<?php echo htmlspecialchars($row_ppal['id_supermercado']); ?>">
-                            <button type="submit" class="btn btn-outline-danger btn-sm" name="btnEliminar">
-                                <span class="material-icons align-bottom">delete_forever</span>
+                            <button type="submit" class="btn text-danger" name="btnEliminar">
+                                <span class="material-symbols-outlined align-bottom">delete</span>
                             </button>
                         </form>
                 </tr>

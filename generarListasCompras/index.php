@@ -7,6 +7,7 @@
     <title>Listas de Cotizaciones</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..0" rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
@@ -26,6 +27,9 @@
     $requiereConfirmacion = false;
 
     if (isset($_POST['btnRegistrar'])) {
+
+echo $_POST['fechaCotizacion'];
+
         $confirmarGeneracion = isset($_POST['confirmar_generar']) && $_POST['confirmar_generar'] === '1';
         $fechaCotizacionInput = trim($_POST['fechaCotizacion']);
         $fechaCotizacionDate = DateTime::createFromFormat('d-m-Y', $fechaCotizacionInput);
@@ -140,7 +144,7 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label for="fechaCotizacion" class="form-label"><span class="material-icons align-bottom">calendar_today</span> Fecha</label>
-                                        <input type="date" class="form-control" id="fechaCotizacion" name="fechaCotizacion" 
+                                        <input type="month" class="form-control" id="fechaCotizacion" name="fechaCotizacion" 
                                         value="<?php  if (!empty($fechaPersist)) {$fecha = DateTime::createFromFormat('d-m-Y', $fechaPersist);
                                                 if ($fecha instanceof DateTime) {
                                                     echo $fecha->format('Y-m-d');
