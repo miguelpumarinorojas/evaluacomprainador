@@ -13,6 +13,7 @@ $filasGeneradas = [];
             <th width="5" class="text-center">Supermercado</th>
             <th width="300">Fecha Creación</th>
             <th width="300">Fecha Cotización</th>
+            <th width="300">Productos Cotizados</th>
             <th width="5">Eliminar</th>
         </tr>
     </thead>
@@ -22,7 +23,12 @@ $filasGeneradas = [];
                                         t1.fecha_creacion,
                                         t1.mes_compra, 
                                         t2.id id_supermercado, 
-                                        t2.descripcion descripcion_supermercado
+                                        t2.descripcion descripcion_supermercado,
+                                        (SELECT COUNT(*) 
+                                        FROM cotizador_mensual WHERE cotizador_mensual.mes_compra = t1.mes_compra AND cotizador_mensual.supermercado = t1.supermercado
+                                        AND  cotizador_mensual.precio <> 0) productos_cotizados,
+                                        (SELECT COUNT(*) 
+                                        FROM cotizador_mensual WHERE cotizador_mensual.mes_compra = t1.mes_compra AND cotizador_mensual.supermercado = t1.supermercado) productos_total
                     FROM cotizador_mensual t1 	inner join supermercados t2 on t2.id = t1.supermercado
                     ORDER BY 1,3";
         $result = $conn->query($query);
@@ -39,6 +45,7 @@ $filasGeneradas = [];
                     </td>
                     <td><?php echo formatoFechaHoraDMY($row_ppal['fecha_creacion']); ?></td>
                     <td><?php echo formatoFechaDMY($row_ppal['mes_compra']); ?></td>
+                    <td><?php echo $row_ppal['productos_cotizados']; ?> de <?php echo $row_ppal['productos_total']; ?></td>
                     <td>
                         <form method="POST" action="eliminarListaDeCompras.php" onsubmit="return confirm('¿Está seguro de eliminar esta lista de compras?. Esto es irreversible.');">
                             <input type="hidden" name="mes_compra" value="<?php echo htmlspecialchars($row_ppal['mes_compra']); ?>">
