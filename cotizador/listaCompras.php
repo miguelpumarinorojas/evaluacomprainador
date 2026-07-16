@@ -3,6 +3,9 @@
 include("../inc/connection.php");
 
 $filasGeneradas = [];
+$mes_compra = $_GET['mes_compra'] ?? '';
+$supermercado = $_GET['supermercado'] ?? '';
+
 ?>
 
 
@@ -17,12 +20,15 @@ $filasGeneradas = [];
             <th width="75">Capacidad</th>
             <th width="100">Precio</th>
             <th width="125">Precio X UM</th>
+            <th width="5"></th>
 
         </tr>
     </thead>
     <tbody>
         <?php
-        $query = "SELECT 	t1.mes_compra, 
+        $query = "SELECT 	
+                    t1.id,
+                    t1.mes_compra, 
                     t3.id id_producto, 
                     t3.descripcion descripcion_producto, 
                     t4.icono categoria_icono,
@@ -37,21 +43,21 @@ $filasGeneradas = [];
                     FROM cotizador_mensual t1 	inner join supermercados t2 on t2.id = t1.supermercado
                                                 inner join productos t3 on t3.id = t1.producto
                                                 inner join categorias t4 on t4.id = t3.categoria
-                    ORDER BY 5,3";
+                    ORDER BY 6,4";
         $result = $conn->query($query);
         if ($result->num_rows > 0) {
             $numero = 1;
             while ($row_ppal = $result->fetch_assoc()) {
-            $filaNumero = $numero++;
-            $filasGeneradas[] = $filaNumero;
+                $filaNumero = $numero++;
+                $filasGeneradas[] = $filaNumero;
         ?>
-            <tr data-mes-compra="<?php echo htmlspecialchars($row_ppal['mes_compra']); ?>"
-                data-producto="<?php echo htmlspecialchars($row_ppal['id_producto']); ?>"
-                data-supermercado="<?php echo htmlspecialchars($row_ppal['id_supermercado']); ?>">
-                <td><?php echo $filaNumero; ?></td>
+                <tr data-mes-compra="<?php echo htmlspecialchars($row_ppal['mes_compra']); ?>"
+                    data-producto="<?php echo htmlspecialchars($row_ppal['id_producto']); ?>"
+                    data-supermercado="<?php echo htmlspecialchars($row_ppal['id_supermercado']); ?>">
+                    <td><?php echo $filaNumero; ?></td>
                     <td><?php echo $row_ppal['descripcion_producto']; ?></td>
                     <td> <span class="material-symbols-outlined"><?php echo $row_ppal['categoria_icono']; ?></span></td>
-                <td><select name="UM" id="fila_<?php echo $filaNumero; ?>_UM" class="form-select" required>
+                    <td><select name="UM" id="fila_<?php echo $filaNumero; ?>_UM" class="form-select" required>
                             <option value=""></option>
                             <?php
                             $query_select = "SELECT * FROM unidades WHERE estado = 1 ORDER BY descripcion";
@@ -67,7 +73,7 @@ $filasGeneradas = [];
                             // $conn->close();
                             ?>
                         </select></td>
-                        <td><select name="marca" id="fila_<?php echo $filaNumero; ?>_marca" class="form-select" required>
+                    <td><select name="marca" id="fila_<?php echo $filaNumero; ?>_marca" class="form-select" required>
                             <option value=""></option>
                             <?php
                             $query_select = "SELECT * FROM marcas WHERE estado = 1 ORDER BY descripcion";
@@ -86,11 +92,21 @@ $filasGeneradas = [];
                     <td><input type="text" class="form-control" pattern="[0-9]+([.,][0-9]+)?" id="fila_<?php echo $filaNumero; ?>_capacidad" name="capacidad" value="<?php echo $row_ppal['capacidad']; ?>"></td>
                     <td><input type="number" class="form-control" id="fila_<?php echo $filaNumero; ?>_precio" name="precio" value="<?php echo $row_ppal['precio']; ?>"></td>
                     <td><input type="number" class="form-control" id="fila_<?php echo $filaNumero; ?>_precioporum" name="precioporum" readonly value="<?php echo $row_ppal['precio_por_um']; ?>"></td>
+                    <td>
+                        <form method="POST" action="eliminarfilacotizacion.php">
+                            <input type="hidden" name="id" value="<?php echo htmlspecialchars($row_ppal['id']); ?>">
+                            <input type="hidden" name="mes_compra" value="<?php echo htmlspecialchars($mes_compra); ?>">
+                            <input type="hidden" name="supermercado" value="<?php echo htmlspecialchars($supermercado); ?>">
+                            <button type="submit" name="btnEliminar" class="btn text-danger" title="Presiona para eliminar">
+                                <span class="material-symbols-outlined align-bottom">delete</span>
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             <?php }
         } else { ?>
             <tr>
-                <td colspan="9">No se encontraron productos.</td>
+                <td colspan="10">No se encontraron productos.</td>
             </tr>
         <?php }
         $conn->close();
