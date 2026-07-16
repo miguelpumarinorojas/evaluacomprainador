@@ -23,16 +23,17 @@ $filasGeneradas = [];
     <tbody>
         <?php
         $query = "SELECT 	t1.mes_compra, 
-                            t3.id id_producto, 
-                            t3.descripcion descripcion_producto, 
-                            t4.icono categoria_icono,
-                            t4.descripcion descripcion_categoría, 
-                            t2.descripcion descripcion_supermercado,
-                            t1.marca,
-                            t1.um,
-                            t1.capacidad,
-                            t1.precio,
-                            t1.precio_por_um
+                    t3.id id_producto, 
+                    t3.descripcion descripcion_producto, 
+                    t4.icono categoria_icono,
+                    t4.descripcion descripcion_categoría, 
+                    t2.id id_supermercado,
+                    t2.descripcion descripcion_supermercado,
+                    t1.marca,
+                    t1.um,
+                    t1.capacidad,
+                    t1.precio,
+                    t1.precio_por_um
                     FROM cotizador_mensual t1 	inner join supermercados t2 on t2.id = t1.supermercado
                                                 inner join productos t3 on t3.id = t1.producto
                                                 inner join categorias t4 on t4.id = t3.categoria
@@ -41,13 +42,16 @@ $filasGeneradas = [];
         if ($result->num_rows > 0) {
             $numero = 1;
             while ($row_ppal = $result->fetch_assoc()) {
-                $filasGeneradas[] = $numero;
+            $filaNumero = $numero++;
+            $filasGeneradas[] = $filaNumero;
         ?>
-                <tr>
-                    <td><?php echo $numero++; ?></td>
+            <tr data-mes-compra="<?php echo htmlspecialchars($row_ppal['mes_compra']); ?>"
+                data-producto="<?php echo htmlspecialchars($row_ppal['id_producto']); ?>"
+                data-supermercado="<?php echo htmlspecialchars($row_ppal['id_supermercado']); ?>">
+                <td><?php echo $filaNumero; ?></td>
                     <td><?php echo $row_ppal['descripcion_producto']; ?></td>
                     <td> <span class="material-symbols-outlined"><?php echo $row_ppal['categoria_icono']; ?></span></td>
-                    <td><select name="UM" id="fila_<?php echo $numero; ?>_UM" class="form-select" required>
+                <td><select name="UM" id="fila_<?php echo $filaNumero; ?>_UM" class="form-select" required>
                             <option value=""></option>
                             <?php
                             $query_select = "SELECT * FROM unidades WHERE estado = 1 ORDER BY descripcion";
@@ -63,7 +67,7 @@ $filasGeneradas = [];
                             // $conn->close();
                             ?>
                         </select></td>
-                    <td><select name="marca" id="fila_<?php echo $numero; ?>_marca" class="form-select" required>
+                        <td><select name="marca" id="fila_<?php echo $filaNumero; ?>_marca" class="form-select" required>
                             <option value=""></option>
                             <?php
                             $query_select = "SELECT * FROM marcas WHERE estado = 1 ORDER BY descripcion";
@@ -79,9 +83,9 @@ $filasGeneradas = [];
                             // $conn->close();
                             ?>
                         </select></td>
-                    <td><input type="text" class="form-control" pattern="[0-9]+([.,][0-9]+)?" id="fila_<?php echo $numero; ?>_capacidad" name="capacidad" value="<?php echo $row_ppal['capacidad']; ?>"></td>
-                    <td><input type="number" class="form-control" id="fila_<?php echo $numero; ?>_precio" name="precio" value="<?php echo $row_ppal['precio']; ?>"></td>
-                    <td><input type="number" class="form-control" id="fila_<?php echo $numero; ?>_precioporum" name="precioporum" readonly value="<?php echo $row_ppal['precio_por_um']; ?>"></td>
+                    <td><input type="text" class="form-control" pattern="[0-9]+([.,][0-9]+)?" id="fila_<?php echo $filaNumero; ?>_capacidad" name="capacidad" value="<?php echo $row_ppal['capacidad']; ?>"></td>
+                    <td><input type="number" class="form-control" id="fila_<?php echo $filaNumero; ?>_precio" name="precio" value="<?php echo $row_ppal['precio']; ?>"></td>
+                    <td><input type="number" class="form-control" id="fila_<?php echo $filaNumero; ?>_precioporum" name="precioporum" readonly value="<?php echo $row_ppal['precio_por_um']; ?>"></td>
                 </tr>
             <?php }
         } else { ?>

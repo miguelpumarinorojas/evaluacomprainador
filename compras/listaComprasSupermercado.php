@@ -11,7 +11,7 @@ $filasGeneradas = [];
 ?>
 
 
-<table class="table table-striped table-hover table-bordered table-sm table-responsive">
+<table class="table table-striped table-hover table-bordered table-sm">
     <thead class="table-dark sticky-top">
         <tr>
             <th width="5">N°</th>
