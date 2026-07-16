@@ -82,7 +82,7 @@
         $stmtGenerar->execute();
 
         if ($stmtGenerar->affected_rows === 0) {
-            $alertaAdvertencia = "No se encontraron resultados para el producto seleccionado en el rango de fechas proporcionado.";
+            $alertaAdvertencia = "No se encontraron cotizaciones registradas para el producto seleccionado en el rango de fechas";
         } else { ?>
             <div class='alert alert-success notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
                 Producto registrado con el mejor precio!! <span class="material-icons align-bottom">done</span>
@@ -103,7 +103,7 @@
         ?>
         <?php if (!empty($alertaAdvertencia)) { ?>
             <div class="alert alert-warning alert-dismissible notification fade show text-center" role="alert">
-                <?php echo $alertaAdvertencia; ?> <span class="material-icons align-bottom">error</span>
+                <?php echo $alertaAdvertencia; ?> <span class="material-icons align-bottom">warning</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
     <?php }
