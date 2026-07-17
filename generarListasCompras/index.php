@@ -28,8 +28,6 @@
 
     if (isset($_POST['btnRegistrar'])) {
 
-echo $_POST['fechaCotizacion'];
-
         $confirmarGeneracion = isset($_POST['confirmar_generar']) && $_POST['confirmar_generar'] === '1';
         $fechaCotizacionInput = trim($_POST['fechaCotizacion']);
         $fechaCotizacionDate = DateTime::createFromFormat('d-m-Y', $fechaCotizacionInput);

@@ -2,6 +2,7 @@
 
 include("../inc/connection.php");
 
+
 if (isset($_POST['btnEliminar'])) {
 
     $id = $_POST['id'];

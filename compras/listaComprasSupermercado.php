@@ -6,6 +6,7 @@ include("../inc/connection.php");
 
 $mes_compra = $_GET['mes_compra'] ?? '';
 $supermercado = $_GET['supermercado'] ?? '';
+$mes_anio_post = $_GET['mes_anio_post'] ?? '';
 
 $filasGeneradas = [];
 ?>
@@ -76,6 +77,7 @@ $filasGeneradas = [];
                     <td>
                         <form method="POST" action="eliminarProductoListaCompras.php" onsubmit="return confirm('¿Está seguro de eliminar este producto?. Esto es irreversible.');">
                             <input type="hidden" name="id" value="<?php echo htmlspecialchars($row_ppal['id']); ?>">
+                            <input type="hidden" name="mes_anio_post" value="<?php echo htmlspecialchars($mes_anio_post); ?>">
                             <button type="submit" class="btn text-danger" name="btnEliminar">
                                 <span class="material-symbols-outlined align-bottom">delete</span>
                             </button>

@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=list_alt_check" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
@@ -25,44 +26,17 @@
     include("../inc/connection.php");
 
     // Variables para persistir la selección de fecha y supermercado
-    $fechaInicialPersist = '';
-    $fechaFinalPersist = '';
+    $fechaInicialPersist = $_GET['mes_anio_post'] ?? '';
     $tipoMensaje = $_GET['tipo'] ?? '';
     $mensajeFlash = $_GET['mensaje'] ?? '';
+    $mes_anio_post = $_POST['mes_anio_post'] ?? '';
 
     if (isset($_POST['btnRegistrar'])) {
 
-        $fechaInicialInput = trim($_POST['fechaInicial']);
-        $fechaFinalInput = trim($_POST['fechaFinal']);
-
-
-        if ($fechaFinalInput < $fechaInicialInput) {
-            $alertaAdvertencia = "Fecha final no puede ser menor a fecha inicial.";
-        } else {
-            $alertaAdvertencia = '';
-        }
+        $mes_anio = trim($_POST['mes_anio']);
 
         $producto = trim($_POST['CodigoProducto']);
         $cantidad = floatval($_POST['cantidad']);
-
-        $fechaInicialDate = DateTime::createFromFormat('d-m-Y', $fechaInicialInput);
-        $fechaFinalDate = DateTime::createFromFormat('d-m-Y', $fechaFinalInput);
-
-        if ($fechaInicialDate instanceof DateTime) {
-            $fechaInicialFormateada = $fechaInicialDate->format('Y-m-d');
-        } else {
-            $fechaInicialIso = DateTime::createFromFormat('Y-m-d', $fechaInicialInput);
-            $fechaInicialFormateada = $fechaInicialIso instanceof DateTime ? $fechaInicialIso->format('Y-m-d') : $fechaInicialInput;
-        }
-
-        if ($fechaFinalDate instanceof DateTime) {
-            $fechaFinalFormateada = $fechaFinalDate->format('Y-m-d');
-        } else {
-            $fechaFinalIso = DateTime::createFromFormat('Y-m-d', $fechaFinalInput);
-            $fechaFinalFormateada = $fechaFinalIso instanceof DateTime ? $fechaFinalIso->format('Y-m-d') : $fechaFinalInput;
-        }
-        $fechaInicialPersist = $fechaInicialInput;
-        $fechaFinalPersist = $fechaFinalInput;
 
         // Aquí puedes realizar la lógica para guardar el producto en la base de datos o realizar otras acciones necesarias. 
         $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
@@ -70,15 +44,15 @@
             die("Conexión fallida: " . $conn->connect_error);
         }
 
+        $fechaInicialPersist = $mes_anio;
 
-        $stmtGenerar = $conn->prepare("CALL sp_precio_menor_por_um(?, ?, ?, ?)");
+        $stmtGenerar = $conn->prepare("CALL sp_precio_menor_por_um(?, ?, ?)");
         if (!$stmtGenerar) {
             $conn->close();
             die("No se pudo preparar el procedimiento almacenado.");
         }
 
-
-        $stmtGenerar->bind_param("ssid", $fechaInicialFormateada, $fechaFinalFormateada, $producto, $cantidad);
+        $stmtGenerar->bind_param("sid", $mes_anio, $producto, $cantidad);
         $stmtGenerar->execute();
 
         if ($stmtGenerar->affected_rows === 0) {
@@ -140,60 +114,35 @@
     <div class="container-fluid">
         <div class="row pt-2">
             <div class="col">
-                <form action="" method="POST" class="needs-validation" autocomplete="off" enctype="multipart/form-data" novalidate>
+                <form action="index.php" method="POST" class="needs-validation" autocomplete="off" enctype="multipart/form-data" novalidate>
                     <div class="card">
                         <div class="card-header bg-secondary text-white">
                             <span class="material-icons align-bottom">add</span> Lista de compras
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col">
+                                <div class="col-md-2">
                                     <div class="mb-3">
-                                        <label for="fechaInicial" class="form-label"><span class="material-icons align-bottom">date_range</span> Fecha Inicial</label>
-                                        <input type="date" class="form-control" id="fechaInicial" name="fechaInicial" value="<?php
-                                                                                                                                if (!empty($fechaInicialPersist)) {
-                                                                                                                                    $fecha = DateTime::createFromFormat('d-m-Y', $fechaInicialPersist);
-                                                                                                                                    if ($fecha instanceof DateTime) {
-                                                                                                                                        echo $fecha->format('Y-m-d');
-                                                                                                                                    } else {
-                                                                                                                                        echo $fechaInicialPersist;
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                                ?>" required autofocus>
+                                        <label for="mes_anio" class="form-label"><span class="material-icons align-bottom">date_range</span> Mes-Año</label>
+                                        <input type="month" class="form-control" id="mes_anio" name="mes_anio" value="<?php if (isset($fechaInicialPersist)) {
+                                                                                                                            echo $fechaInicialPersist;
+                                                                                                                        } else {
+                                                                                                                            echo $_GET['mes_anio_post'] ?? '';
+                                                                                                                        } ?>" required autofocus>
                                         <div class="invalid-feedback">
-                                            Seleccione una fecha inicio.
+                                            Seleccione mes-año.
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label for="fechaFinal" class="form-label"><span class="material-icons align-bottom">date_range</span> Fecha Final</label>
-                                        <input type="date" class="form-control" id="fechaFinal" name="fechaFinal" value="<?php
-                                                                                                                            if (!empty($fechaFinalPersist)) {
-                                                                                                                                $fecha = DateTime::createFromFormat('d-m-Y', $fechaFinalPersist);
-                                                                                                                                if ($fecha instanceof DateTime) {
-                                                                                                                                    echo $fecha->format('Y-m-d');
-                                                                                                                                } else {
-                                                                                                                                    echo $fechaFinalPersist;
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                            ?>" required autofocus>
-                                        <div class="invalid-feedback">
-                                            Seleccione una fecha final.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-8">
                                     <div class="mb-3">
                                         <label for="CodigoProducto" class="form-label"><span class="material-icons align-bottom">inventory_2</span> Producto</label>
-                                        <select name="CodigoProducto" id="CodigoProducto" class="form-select" required>
+                                        <select name="CodigoProducto" id="CodigoProducto" class="form-select js-example-basic-single" required>
                                             <option value="">Seleccione un producto</option>
                                             <?php
                                             include("../inc/connection.php");
 
-                                            $query_select = "SELECT * FROM productos WHERE estado = 1 ORDER BY descripcion";
+                                            $query_select = "SELECT id,descripcion FROM productos WHERE estado = 1 ORDER BY descripcion";
                                             $result_select = $conn->query($query_select);
 
                                             if ($result_select->num_rows > 0) {
@@ -212,7 +161,7 @@
                                     </div>
 
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="mb-3">
                                         <label for="cantidad" class="form-label"><span class="material-icons align-bottom">tag</span> Cantidad</label>
                                         <input type="number" class="form-control" id="cantidad" name="cantidad" required>
@@ -270,6 +219,13 @@
                 }, false)
             })
         })()
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+    <script>
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
     </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="../js/bootstrap-datepicker.js"></script>
