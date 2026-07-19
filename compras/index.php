@@ -192,7 +192,9 @@
                         </div>
                     </div>
                     <div class="card-body table-responsive">
-                        <?php include("listaComprasSupermercado.php"); ?>
+                        <div id="TABLA_DE_COMPRAS">
+                        </div>
+                        <?php //include("listaComprasSupermercado.php"); ?>
                     </div>
                 </div>
             </div>
@@ -220,16 +222,30 @@
             })
         })()
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
-    <script>
-        // In your Javascript (external .js resource or <script> tag)
-        $(document).ready(function() {
-            $('.js-example-basic-single').select2();
-        });
-    </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="../js/bootstrap-datepicker.js"></script>
     <script src="../js/locales/bootstrap-datepicker.es.js"></script>
+    <script>
+        $(document).ready(function() {
+            CARGALISTADECOMPRAS();
+            $('#mes_anio').on('change', function() {
+            console.log('Fecha de cotización cambiada a: ' + $(this).val());
+                CARGALISTADECOMPRAS();
+            });
+        });
+
+        function CARGALISTADECOMPRAS() {
+            $('#TABLA_DE_COMPRAS').html('<div class="d-flex justify-content-center"><div class="spinner-border text-primary" style="width: 4rem; height: 4rem;" role="status"><span class="visually-hidden">Loading...</span></div></div>');
+            $.ajax({
+                type: "POST",
+                url: "listaComprasSupermercado.php",
+                data: "FECHA_COTIZACION=" + $('#mes_anio').val(),
+                success: function(r) {
+                    $('#TABLA_DE_COMPRAS').html(r);
+                }
+            });
+        }
+    </script>
     <script>
         $('.datepicker').datepicker({
             language: 'es',

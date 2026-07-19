@@ -234,6 +234,16 @@
     <script src="../js/locales/bootstrap-datepicker.es.js"></script>
     <script src="../js/calcularPrecio.js"></script>
     <script>
+        $(document).ready(function() {
+            $('#fechaCotizacion').change({
+                function() {
+                    var fechaSeleccionada = $(this).val();
+                    console.log("Fecha seleccionada: " + fechaSeleccionada); // Agrega esta línea para depuración
+                }
+            });
+        });
+    </script>
+    <script>
         $('.datepicker').datepicker({
             language: 'es',
             format: 'dd-mm-yyyy',

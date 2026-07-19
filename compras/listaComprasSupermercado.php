@@ -1,14 +1,13 @@
 <?php
 
 include("../inc/connection.php");
-// include("../inc/funciones.php");
+include("../inc/funciones.php");
 
 
-$mes_compra = $_GET['mes_compra'] ?? '';
-$supermercado = $_GET['supermercado'] ?? '';
-$mes_anio_post = $_GET['mes_anio_post'] ?? '';
+$fecha_cotizacion = $_POST['FECHA_COTIZACION'];
 
-$filasGeneradas = [];
+//echo $fecha_cotizacion;
+
 ?>
 
 
@@ -54,7 +53,7 @@ $filasGeneradas = [];
                                             inner join unidades t4 on t1.um = t4.id
                                             inner join categorias t5 on t2.categoria = t5.id
                                             inner join marcas t6 on t1.marca = t6.id
-                    WHERE t1.estado = 0
+                    WHERE t1.estado = 0 and t1.fecha_cotizacion = '" . $fecha_cotizacion . "'
                     ORDER BY 4,7,5";
         $result = $conn->query($query);
         if ($result->num_rows > 0) {
@@ -77,7 +76,7 @@ $filasGeneradas = [];
                     <td>
                         <form method="POST" action="eliminarProductoListaCompras.php" onsubmit="return confirm('¿Está seguro de eliminar este producto?. Esto es irreversible.');">
                             <input type="hidden" name="id" value="<?php echo htmlspecialchars($row_ppal['id']); ?>">
-                            <input type="hidden" name="mes_anio_post" value="<?php echo htmlspecialchars($mes_anio_post); ?>">
+                            <input type="hidden" name="FECHA_COTIZACION" value="<?php echo htmlspecialchars($fecha_cotizacion); ?>">
                             <button type="submit" class="btn text-danger" name="btnEliminar">
                                 <span class="material-symbols-outlined align-bottom">delete</span>
                             </button>
@@ -97,7 +96,16 @@ $filasGeneradas = [];
 <form method="POST" action="registrarCompra.php" onsubmit="return confirm('¿Está seguro de registrar esta compra?');">
     <div class="card-footer text-end">
         <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-outline-success" name="btnRegistrarCompra"><span class="material-icons align-bottom">save</span> Registrar Compra</button>
+            <?php if ($fecha_cotizacion != '' && $result->num_rows > 0) { ?>
+                <a href="listar.php?mes_compra=<?php echo $fecha_cotizacion; ?>" target="_blank" class="btn btn-outline-danger" name="btnRegistrarCompra">
+                    <span class="material-icons align-bottom">picture_as_pdf</span> Generar PDF
+                </a>
+            <?php } else { ?>
+                <button target="_blank" class="btn btn-outline-secondary" name="btnRegistrarCompra" disabled>
+                    <span class="material-icons align-bottom">block</span> Selecciona un mes y año para generar PDF
+                </button>
+            <?php   } ?>
+
         </div>
     </div>
 </form>
