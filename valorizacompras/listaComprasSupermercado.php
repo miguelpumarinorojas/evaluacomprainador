@@ -63,7 +63,7 @@ $fecha_cotizacion = $_POST['FECHA_COTIZACION'];
         ?>
                 <tr>
                     <td><?php echo $numero++; ?></td>
-                    <td><img src="../maestros/supermercados/<?php echo $row_ppal['logo']; ?>" alt="Logo" width="50" height="50"></td>
+                    <td class="text-center"><img src="../maestros/supermercados/<?php echo $row_ppal['logo']; ?>" alt="Logo" height="50"></td>
                     <td><span class="material-symbols-outlined align-bottom" title="<?php echo $row_ppal['descripcion_categoria']; ?>"><?php echo $row_ppal['icono_categoria']; ?></span></td>
                     <td><?php echo $row_ppal['descripcion_producto']; ?></td>
                     <td><?php echo $row_ppal['descripcion_um']; ?></td>

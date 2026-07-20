@@ -4,6 +4,8 @@ include("../inc/connection.php");
 include("../inc/funciones.php");
 
 $filasGeneradas = [];
+$fecha_cotizacion = $_POST['FECHA_COTIZACION'];
+
 ?>
 
 
@@ -30,6 +32,7 @@ $filasGeneradas = [];
                                         (SELECT COUNT(*) 
                                         FROM cotizador_mensual WHERE cotizador_mensual.mes_compra = t1.mes_compra AND cotizador_mensual.supermercado = t1.supermercado) productos_total
                     FROM cotizador_mensual t1 	inner join supermercados t2 on t2.id = t1.supermercado
+                    WHERE t1.mes_compra = '" . $fecha_cotizacion . "'
                     ORDER BY 1,3";
         $result = $conn->query($query);
         if ($result->num_rows > 0) {

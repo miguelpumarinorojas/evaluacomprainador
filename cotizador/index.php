@@ -120,7 +120,6 @@
         <div class="container-fluid">
             <span class="navbar-brand mb-0 h1"><span class="material-icons align-bottom">shopping_cart</span> EvaluaCompraInador</span>
             <a class="navbar-brand" href="#">
-                <!-- <img src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Bootstrap" width="30" height="24"> -->
                 <span class="material-icons align-bottom">app_registration</span>
             </a>
         </div>
@@ -133,11 +132,11 @@
                 </a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-                <a href="../generarlistascompras/" class="text-decoration-none text-dark">
+                <a href="../cotizacompras/index.php?mes_compra=<?php echo $mes_compra; ?>" class="text-decoration-none text-dark">
                     <span class="material-icons align-bottom">list_alt</span> Listas de Compras
                 </a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page"><span class="material-icons align-bottom">attach_money</span> Fecha Cotización: <?php echo formatoFechaDMY($mes_compra); ?></li>
+            <li class="breadcrumb-item active" aria-current="page"><span class="material-icons align-bottom">attach_money</span> Fecha Cotización: <?php echo formatoMesAño($mes_compra); ?></li>
         </ol>
     </nav>
     <div class="container-fluid">

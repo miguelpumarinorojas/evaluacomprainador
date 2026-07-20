@@ -35,8 +35,6 @@
 
         $mes_anio = trim($_POST['mes_anio']);
 
-        $producto = trim($_POST['CodigoProducto']);
-        $cantidad = floatval($_POST['cantidad']);
 
         // Aquí puedes realizar la lógica para guardar el producto en la base de datos o realizar otras acciones necesarias. 
         $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
@@ -46,20 +44,20 @@
 
         $fechaInicialPersist = $mes_anio;
 
-        $stmtGenerar = $conn->prepare("CALL sp_precio_menor_por_um(?, ?, ?)");
+        $stmtGenerar = $conn->prepare("CALL sp_precio_menor_por_um_masivo(?)");
         if (!$stmtGenerar) {
             $conn->close();
             die("No se pudo preparar el procedimiento almacenado.");
         }
 
-        $stmtGenerar->bind_param("sid", $mes_anio, $producto, $cantidad);
+        $stmtGenerar->bind_param("s", $mes_anio);
         $stmtGenerar->execute();
 
         if ($stmtGenerar->affected_rows === 0) {
             $alertaAdvertencia = "No se encontraron cotizaciones registradas para el producto seleccionado en el rango de fechas";
         } else { ?>
             <div class='alert alert-success notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
-                Producto registrado con el mejor precio!! <span class="material-icons align-bottom">done</span>
+                Lista de precios valorizada con los mejores precios!! <span class="material-icons align-bottom">done</span>
             </div>
         <?php  }
 
@@ -121,7 +119,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col">
                                     <div class="mb-3">
                                         <label for="mes_anio" class="form-label"><span class="material-icons align-bottom">date_range</span> Mes-Año</label>
                                         <input type="month" class="form-control" id="mes_anio" name="mes_anio" value="<?php if (isset($fechaInicialPersist)) {
@@ -131,42 +129,6 @@
                                                                                                                         } ?>" required autofocus>
                                         <div class="invalid-feedback">
                                             Seleccione mes-año.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="mb-3">
-                                        <label for="CodigoProducto" class="form-label"><span class="material-icons align-bottom">inventory_2</span> Producto</label>
-                                        <select name="CodigoProducto" id="CodigoProducto" class="form-select js-example-basic-single" required>
-                                            <option value="">Seleccione un producto</option>
-                                            <?php
-                                            include("../inc/connection.php");
-
-                                            $query_select = "SELECT id,descripcion FROM productos WHERE estado = 1 ORDER BY descripcion";
-                                            $result_select = $conn->query($query_select);
-
-                                            if ($result_select->num_rows > 0) {
-                                                while ($row = $result_select->fetch_assoc()) { ?>
-                                                    <option value="<?php echo $row['id']; ?>"><?php echo $row['descripcion']; ?></option>
-                                                <?php }
-                                            } else { ?>
-                                                <option value="">No se encontraron productos</option>
-                                            <?php }
-                                            $conn->close();
-                                            ?>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Seleccione un producto
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="mb-3">
-                                        <label for="cantidad" class="form-label"><span class="material-icons align-bottom">tag</span> Cantidad</label>
-                                        <input type="number" class="form-control" id="cantidad" name="cantidad" required>
-                                        <div class="invalid-feedback">
-                                            Ingrese la cantidad del producto.
                                         </div>
                                     </div>
                                 </div>

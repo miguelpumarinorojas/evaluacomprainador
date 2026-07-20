@@ -20,6 +20,8 @@
 <body>
     <?php
 
+    $mes_compra = $_GET['mes_compra'] ?? '';
+
     // Variables para persistir la selección de fecha y supermercado
     $fechaPersist = '';
     $supermercadoPersist = '';
@@ -27,6 +29,9 @@
     $requiereConfirmacion = false;
 
     if (isset($_POST['btnRegistrar'])) {
+
+        
+
 
         $confirmarGeneracion = isset($_POST['confirmar_generar']) && $_POST['confirmar_generar'] === '1';
         $fechaCotizacionInput = trim($_POST['fechaCotizacion']);
@@ -143,14 +148,7 @@
                                     <div class="mb-3">
                                         <label for="fechaCotizacion" class="form-label"><span class="material-icons align-bottom">calendar_today</span> Fecha</label>
                                         <input type="month" class="form-control" id="fechaCotizacion" name="fechaCotizacion" 
-                                        value="<?php  if (!empty($fechaPersist)) {$fecha = DateTime::createFromFormat('d-m-Y', $fechaPersist);
-                                                if ($fecha instanceof DateTime) {
-                                                    echo $fecha->format('Y-m-d');
-                                                } else {
-                                                    echo $fechaPersist;
-                                                }
-                                            }
-                                        ?>" required autofocus>
+                                        value="<?php  echo $mes_compra;?>" required autofocus>
                                         <div class="invalid-feedback">
                                             Seleccione una fecha.
                                         </div>
@@ -201,7 +199,8 @@
                         <span class="material-icons align-bottom">attach_money</span> Listas de cotizaciones generadas
                     </div>
                     <div class="card-body">
-                        <?php include("listasDeComprasGeneradas.php"); ?>
+                        <div id="TABLA_DE_COMPRAS"></div>
+                        <?php //include("listasDeComprasGeneradas.php"); ?>
                     </div>
                 </div>
             </div>
@@ -233,6 +232,27 @@
     <script src="../js/bootstrap-datepicker.js"></script>
     <script src="../js/locales/bootstrap-datepicker.es.js"></script>
     <script src="../js/calcularPrecio.js"></script>
+    <script>
+        $(document).ready(function() {
+            CARGALISTACOTIZACIONES();
+            $('#fechaCotizacion').change(function() {
+            console.log('Fecha de cotización cambiada a: ' + $(this).val());
+                CARGALISTACOTIZACIONES();
+            });
+        });
+
+        function CARGALISTACOTIZACIONES() {
+            $('#TABLA_DE_COMPRAS').html('<div class="d-flex justify-content-center"><div class="spinner-border text-primary" style="width: 4rem; height: 4rem;" role="status"><span class="visually-hidden">Loading...</span></div></div>');
+            $.ajax({
+                type: "POST",
+                url: "listasDeComprasGeneradas.php",
+                data: "FECHA_COTIZACION=" + $('#fechaCotizacion').val(),
+                success: function(r) {
+                    $('#TABLA_DE_COMPRAS').html(r);
+                }
+            });
+        }
+    </script>
     <script>
         $(document).ready(function() {
             $('#fechaCotizacion').change({
