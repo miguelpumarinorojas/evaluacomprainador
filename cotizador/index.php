@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=list_alt_check" />
+    <!-- TOM SELECT CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.6.2/dist/css/tom-select.css" rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
@@ -151,13 +153,13 @@
                                 </h3>
                             </div>
                             <div class="col d-flex justify-content-end align-items-center"> <?php
-                                                $querySupermercado = "SELECT logo FROM supermercados WHERE id = ?";
-                                                $stmtSupermercado = $conn->prepare($querySupermercado);
-                                                $stmtSupermercado->bind_param("i", $supermercado);
-                                                $stmtSupermercado->execute();
-                                                $stmtSupermercado->bind_result($logoSupermercado);
-                                                $stmtSupermercado->fetch();
-                                                $stmtSupermercado->close(); ?>
+                                                                                            $querySupermercado = "SELECT logo FROM supermercados WHERE id = ?";
+                                                                                            $stmtSupermercado = $conn->prepare($querySupermercado);
+                                                                                            $stmtSupermercado->bind_param("i", $supermercado);
+                                                                                            $stmtSupermercado->execute();
+                                                                                            $stmtSupermercado->bind_result($logoSupermercado);
+                                                                                            $stmtSupermercado->fetch();
+                                                                                            $stmtSupermercado->close(); ?>
                                 <img src="../maestros/supermercados/<?php echo $logoSupermercado; ?>" height="50">
                                 <?php ?>
                             </div>
@@ -217,6 +219,19 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+    <!-- TOM SELECT JS -->
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.6.2/dist/js/tom-select.complete.min.js"></script>
+    <script>
+        document.querySelectorAll('select[class*="select-beast"]').forEach(el => {
+            new TomSelect(el, {
+                create: true,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                }
+            });
+        });
+    </script>
 
     <script>
         if (window.history.replaceState) {

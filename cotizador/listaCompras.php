@@ -58,7 +58,7 @@ $supermercado = $_GET['supermercado'] ?? '';
                     <td><?php echo $filaNumero; ?></td>
                     <td><?php echo $row_ppal['descripcion_producto']; ?></td>
                     <td> <span class="material-symbols-outlined"><?php echo $row_ppal['categoria_icono']; ?></span></td>
-                    <td><select name="UM" id="fila_<?php echo $filaNumero; ?>_UM" class="form-select" required>
+                    <td><select name="UM" id="fila_<?php echo $filaNumero; ?>_UM" class="form-select select-beast" required>
                             <option value=""></option>
                             <?php
                             $query_select = "SELECT * FROM unidades WHERE estado = 1 ORDER BY descripcion";
@@ -74,7 +74,7 @@ $supermercado = $_GET['supermercado'] ?? '';
                             // $conn->close();
                             ?>
                         </select></td>
-                    <td><select name="marca" id="fila_<?php echo $filaNumero; ?>_marca" class="form-select" required>
+                    <td><select name="marca" id="fila_<?php echo $filaNumero; ?>_marca" class="form-select select-beast" required>
                             <option value=""></option>
                             <?php
                             $query_select = "SELECT * FROM marcas WHERE estado = 1 ORDER BY descripcion";
