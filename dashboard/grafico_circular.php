@@ -11,10 +11,12 @@ try {
     $conn = new mysqli($serverName, $username, $password, $database);
 
     // Ejemplo: obtener nombre y cantidad de votos
-    $sql = "SELECT  fecha_cotizacion,
-                    SUM(lista_compras.total_por_producto) total_mensual
-            FROM lista_compras
-            GROUP BY fecha_cotizacion";
+    $sql = "SELECT  t3.descripcion categorias,		
+                    SUM(t1.total_por_producto) total_mensual
+            FROM lista_compras t1 	inner join productos t2 on t1.producto = t2.id
+                                    inner join categorias t3 on t3.id = t2.categoria
+            GROUP BY t3.descripcion
+            ORDER BY total_mensual desc";
     $stmt = $conn->query($sql);
     $result = $stmt->fetch_all(MYSQLI_ASSOC);
 

@@ -7,7 +7,7 @@
     <title>EvaluaCompraInador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
@@ -42,26 +42,47 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card mt-2">
                     <div class="card-body">
-                        <h5 class="card-title"><span class="material-icons align-bottom">list_alt</span> Evolución de compras mensuales</h5>
+                        <h5 class="card-title"><span class="material-symbols-outlined align-bottom">finance_mode</span> Evolución de compras mensuales</h5>
                         <!-- <p class="card-text">Selecciona fecha y supermercado para registrar listas de cotizaciones</p> -->
                         <div>
-                            <canvas id="myChart" style="width: 300px;"></canvas>
+                            <canvas id="myChart" style="width: 100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mt-2">
+                    <div class="card-body">
+                        <h5 class="card-title"><span class="material-symbols-outlined align-bottom">finance</span> Totales historicos acumulados por categorías</h5>
+                        <!-- <p class="card-text">Selecciona fecha y supermercado para registrar listas de cotizaciones</p> -->
+                        <div>
+                            <canvas id="myChart_barras" style="width: 100%;"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- <div class="row">
+            <div class="col-md-5">
+                <div class="card mt-2">
+                    <div class="card-body">
+                        <h5 class="card-title"><span class="material-symbols-outlined align-bottom">finance_mode</span> Evolución de compras mensuales</h5>
+                        <div>
+                            <canvas id="myChart_circular"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
     </div>
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
     <script>
-        const ctx = document.getElementById('myChart');
-
         function formatearLabelMesAnio(fechaValor) {
             if (!fechaValor) return '';
 
@@ -113,6 +134,7 @@
             }).format(monto);
         }
 
+        const ctx1 = document.getElementById('myChart').getContext('2d');
         fetch('grafico_linea.php') // tu archivo PHP
             .then(response => response.json())
             .then(data => {
@@ -120,7 +142,25 @@
                 const labels = data.map(item => formatearLabelMesAnio(item.fecha_cotizacion));
                 const valores = data.map(item => parsearMonto(item.total_mensual));
 
-                new Chart(ctx, {
+                // Agregar un espacio vacío al inicio
+                labels.unshift(''); // etiqueta vacía
+                valores.unshift(null); // valor nulo para que no dibuje punto
+
+                // Generar un array de colores dinámico, uno por cada label
+                const colores = labels.map((_, i) => {
+                    const palette = [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(153, 102, 255)',
+                        'rgb(255, 159, 64)'
+                    ];
+                    // Ciclar la paleta si hay más labels que colores
+                    return palette[i % palette.length];
+                });
+
+                new Chart(ctx1, {
                     type: 'line',
                     data: {
                         labels: labels,
@@ -129,7 +169,8 @@
                             data: valores,
                             borderWidth: 1,
                             borderColor: 'black',
-                            backgroundColor: 'blue'
+                            backgroundColor: colores,
+                            spanGaps: true // evita unir el null con el siguiente punto
                         }]
                     },
                     options: {
@@ -152,6 +193,137 @@
                             }
                         }
                     }
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+    <script>
+        const ctx = document.getElementById('myChart_barras').getContext('2d');
+        fetch('grafico_circular.php') // tu archivo PHP
+            .then(response => response.json())
+            .then(data => {
+                // Extraer labels y valores desde el JSON
+                const labels = data.map(item => formatearLabelMesAnio(item.categorias));
+                const valores = data.map(item => parsearMonto(item.total_mensual));
+
+                // Generar un array de colores dinámico, uno por cada label
+                const colores = labels.map((_, i) => {
+                    const palette = [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(153, 102, 255)',
+                        'rgb(255, 159, 64)'
+                    ];
+                    // Ciclar la paleta si hay más labels que colores
+                    return palette[i % palette.length];
+                });
+
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Suma por Categoría',
+                            data: valores,
+                            borderWidth: 1,
+                            borderColor: 'black',
+                            backgroundColor: colores,
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => {
+                                        const etiqueta = context.dataset.label ? context.dataset.label + ': ' : '';
+                                        return etiqueta + formatearMonedaCLP(context.parsed.y);
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                anchor: 'end', // posición del label
+                                align: 'top', // alineación sobre la barra
+                                formatter: (value) => formatearMonedaCLP(value),
+                                color: 'black',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: (value) => formatearMonedaCLP(value)
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script>
+        const ctx2 = document.getElementById('myChart_circular').getContext('2d');
+        fetch('grafico_circular.php')
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.map(item => formatearLabelMesAnio(item.categorias));
+                const valores = data.map(item => parsearMonto(item.total_mensual));
+
+                // Generar colores dinámicos
+                const colores = labels.map((_, i) => {
+                    const palette = [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(153, 102, 255)',
+                        'rgb(255, 159, 64)'
+                    ];
+                    return palette[i % palette.length];
+                });
+
+                new Chart(ctx2, {
+                    type: 'doughnut', // cambiamos a gráfico circular
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Suma por Categoría',
+                            data: valores,
+                            borderColor: 'white',
+                            borderWidth: 2,
+                            backgroundColor: colores
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => {
+                                        const etiqueta = context.label ? context.label + ': ' : '';
+                                        return etiqueta + formatearMonedaCLP(context.parsed);
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                formatter: (value, context) => formatearMonedaCLP(value),
+                                color: 'black',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            legend: {
+                                position: 'right'
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
                 });
             })
             .catch(error => console.error('Error:', error));
