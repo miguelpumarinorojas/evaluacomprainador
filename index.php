@@ -81,6 +81,16 @@
             <div class="col">
                 <div class="card mt-2">
                     <div class="card-body">
+                        <a href="historico" class="text-decoration-none text-dark">
+                            <h5 class="card-title"><span class="material-symbols-outlined align-bottom">attach_money</span> Historico de precios</h5>
+                        </a>
+                        <p class="card-text">Buscar historial de precios por producto y fecha</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card mt-2">
+                    <div class="card-body">
                         <a href="maestros" class="text-decoration-none text-dark">
                             <h5 class="card-title"><span class="material-symbols-outlined align-bottom">list_alt</span> Maestros</h5>
                         </a>
