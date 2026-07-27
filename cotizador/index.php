@@ -1,3 +1,11 @@
+<?php
+include('../inc/connection.php');
+include("../login/session.php");
+session_variable('../');
+
+?>
+
+
 <!doctype html>
 <html lang="en">
 
@@ -120,10 +128,18 @@
     <?php } ?>
     <nav class="navbar bg-dark navbar-dark">
         <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1"><span class="material-icons align-bottom">shopping_cart</span> EvaluaCompraInador</span>
-            <a class="navbar-brand" href="#">
-                <span class="material-icons align-bottom">app_registration</span>
-            </a>
+            <div>
+                <span class="navbar-brand mb-0 h1"><span class="material-icons align-bottom">shopping_cart</span> EvaluaCompraInador</span>
+                <br>
+                <span class="navbar-text">Bienvenido: <?php echo $_SESSION['nombre']; ?></span>
+            </div>
+            <div class="badge align-bottom">
+                <a href='../login/logout.php' class="text-white text-decoration-none">
+                    <span class="material-symbols-outlined align-bottom" title="Presione para salir del sistema">
+                        logout
+                    </span>
+                </a>
+            </div>
         </div>
     </nav>
     <nav aria-label="breadcrumb" class="bg-light py-2 px-3">
