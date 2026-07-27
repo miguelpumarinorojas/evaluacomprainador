@@ -4,51 +4,43 @@ session_start();
 include("../inc/connection.php");
 
 ?>
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
-  <!-- font awesome -->
-  <script src="https://kit.fontawesome.com/29d76145d2.js" crossorigin="anonymous"></script>
-
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - Evaluacomprainador</title>
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!--favicon -->
   <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
   <link rel="manifest" href="../img/site.webmanifest">
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-  <!-- other CSS -->
-  <link rel="stylesheet" href="../css/style.css">
-  <link href="../css/signin.css" rel="stylesheet">
-
-  <!--Google Icons -->
-  <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script&family=Open+Sans+Condensed:ital,wght@0,300;1,300&family=Playfair+Display&family=Quicksand:wght@300&family=Roboto+Condensed:wght@300&display=swap" rel="stylesheet">
-
   <style>
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
+    body {
+      background-color: #011f3d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+    }
+
+    .login-logo {
+      width: 100%;
+      margin-bottom: 1rem;
     }
 
     .notification {
@@ -61,23 +53,15 @@ include("../inc/connection.php");
       opacity: 0.8;
     }
   </style>
-  <!-- Custom styles for this template -->
-  <title>EvaluaCompraInador</title>
 </head>
 
-<body class="text-center bg-dark">
+<body>
   <?php
 
   error_reporting(E_ALL);
 
-  // $conexion = odbc_connect($host_odbc, $user_db, $pass_db);
-
-  // if (!$conn) {
-  //  die("La conexion falló: " . $conn);
-  // }
-
-  // $username="";
-
+  $invalidPassword = false;
+  $invalidEmail = false;
   if (isset($_POST['BTN_LOGIN'])) {
 
     $username = $_POST['MAIL_USUARIO'];
@@ -92,13 +76,9 @@ include("../inc/connection.php");
       $resultado = $row['email'];
     };
 
-    if ($resultado == '') { ?>
-
-      <div class='alert alert-danger notification alert-dismissible fade show text-center' role='alert'>
-        Email de usuario no se encuentra registrado o usuario inactivo. Contacta al Administrador del sistema.
-      </div>
-
-      <?php } else {
+    if ($resultado == '') {
+      $invalidEmail = true;
+    } else {
 
       //OBTIENE PASSWORD PARA USUARIO INGRESADO
       $sql = "SELECT * FROM usuarios WHERE email = '$_POST[MAIL_USUARIO]'";
@@ -120,44 +100,55 @@ include("../inc/connection.php");
       //VALIDA QUE PASSWORD INGRESADO SEA IGUAL AL REGISTRADO EN BD
       if ($password == $resultado) {
 
-          $_SESSION['loggedin'] = true;
-          $_SESSION['start'] = time();
-          $_SESSION['expire'] = $_SESSION['start'] + (100 * 120);
-          $_SESSION['nombre'] = $result_nombre;
-          $_SESSION['email'] = $result_mail;
-          $_SESSION['timeout'] = time();
-          header("Location:../");
-        
-      } else { ?>
-        <div class='alert alert-danger notification alert-dismissible fade show text-center' role='alert'>
-          Usuario y/o contraseña incorrectos, intente nuevamente.
-        </div>
-  <?php }
+        $_SESSION['loggedin'] = true;
+        $_SESSION['start'] = time();
+        $_SESSION['expire'] = $_SESSION['start'] + (100 * 120);
+        $_SESSION['nombre'] = $result_nombre;
+        $_SESSION['email'] = $result_mail;
+        $_SESSION['timeout'] = time();
+        header("Location:../");
+      } else {
+        $invalidPassword = true;
+      }
     }
   } ?>
-
-
-  <div class="container-fluid">
-    <form class="form-signin" class="needs-validation" action="login.php" method="POST" autocomplete="off" novalidate>
-      <div class="form-floating">
-        <!-- <div class="col-md-12"> -->
-        <img src="../img/evaluacomprainador.png" class="img-responsive" alt="Logo EvaluaCompraInador" width="100%">
-        <!-- </div> -->
+  <div class="login-card text-center">
+    <img src="../img/evaluacomprainador.png" alt="Logo Evaluacomprainador" class="login-logo" width="100%">
+    <form class="needs-validation" action="login.php" method="POST" autocomplete="off" novalidate>
+      <div class="mb-3 text-start">
+        <label for="email" class="form-label">Correo electrónico</label>
+        <input type="email"
+          class="form-control <?php echo ($invalidEmail ? 'is-invalid' : ''); ?>"
+          id="email"
+          name="MAIL_USUARIO"
+          placeholder="usuario@correo.com"
+          value="<?php echo isset($_POST['MAIL_USUARIO']) ? htmlspecialchars($_POST['MAIL_USUARIO']) : ''; ?>"
+          required>
+        <span class="invalid-feedback">
+          <?php echo $invalidEmail ? 'Email de usuario no registrado o inactivo.' : 'Por favor, ingrese un correo electrónico válido.'; ?>
+        </span>
       </div>
-      <div class="form-floating mb-3">
-        <input type="email" class="form-control" name="MAIL_USUARIO"  placeholder="name@example.com" required>
-        <label for="floatingInput">Usuario</label>
+      <div class="mb-3 text-start">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password"
+          class="form-control <?php echo ($invalidPassword ? 'is-invalid' : ''); ?>"
+          id="password"
+          name="PASSWORD_USUARIO"
+          placeholder="********"
+          required>
+        <span class="invalid-feedback">
+          <?php echo $invalidPassword ? 'Usuario y/o contraseña incorrectos, intente nuevamente.' : 'Por favor, ingrese una contraseña válida.'; ?>
+        </span>
       </div>
-      <div class="form-floating">
-        <input type="password" class="form-control" name="PASSWORD_USUARIO" id="floatingPassword" placeholder="Password" required>
-        <label for="floatingPassword">Contraseña</label>
-      </div>
-      <div class="d-grid gap-2">
-        <button class="btn btn-primary" type="submit" name="BTN_LOGIN">Ingresar</button>
-        <p class="mt-5 mb-3 text-white">&copy; 2026 EvaluaCompraInador</p>
-      </div>
+      <button type="submit" name="BTN_LOGIN" class="btn btn-primary w-100">Ingresar</button>
     </form>
+
+
+    <div class="mt-3">
+      <small class="text-muted">© 2026 Evaluacomprainador</small>
+    </div>
   </div>
+
   <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (() => {
@@ -193,4 +184,5 @@ include("../inc/connection.php");
     }
   </script>
 </body>
+
 </html>
