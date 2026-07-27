@@ -4,18 +4,17 @@ include("../inc/connection.php");
 include("../inc/funciones.php");
 
 $producto  = $_POST['PRODUCTO'];
-
-// echo "ID Producto: " . $producto . "<br>";
-
+$supermercado = $_POST['SUPERMERCADO'];
+$fecha = $_POST['FECHA_INICIO'];
 
 if ($producto === '') { ?>
-    <table class="table table-striped table-hover">
-        <thead>
+    <table class="table table-striped table-hover table-sm table-responsive">
+        <thead class="table-dark">
             <tr>
                 <th>Producto</th>
                 <th>Marca</th>
                 <th>Supermercado</th>
-                <th>Mes de compra</th>
+                <th>Mes</th>
                 <th>Precio</th>
             </tr>
         </thead>
@@ -28,12 +27,12 @@ if ($producto === '') { ?>
 <?php } else { ?>
 
     <table class="table table-striped table-hover">
-        <thead>
+        <thead class="table-dark">
             <tr>
                 <th>Producto</th>
                 <th>Marca</th>
                 <th>Supermercado</th>
-                <th>Mes de compra</th>
+                <th>Mes</th>
                 <th>Precio</th>
             </tr>
         </thead>
@@ -49,8 +48,10 @@ if ($producto === '') { ?>
                                                 inner join supermercados t3 on t1.supermercado = t3.id
                                                 inner join marcas t4 on t1.marca = t4.id
                                                 inner join unidades t5 on t5.id = t1.um
-                    WHERE t1.producto = '$producto'
-                    ORDER BY t2.descripcion,mes_compra DESC
+                    WHERE   (t1.producto = '$producto') and 
+                            (t1.supermercado = '$supermercado' or '$supermercado' = '') and 
+                            (t1.mes_compra = '$fecha' or '$fecha' = '')
+                    ORDER BY t1.precio
                     LIMIT 10";
             $result = mysqli_query($conn, $query);
             if (mysqli_num_rows($result) == 0) { ?>

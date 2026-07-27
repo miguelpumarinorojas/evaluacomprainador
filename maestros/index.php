@@ -7,6 +7,7 @@
     <title>EvaluaCompraInador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
@@ -88,6 +89,17 @@
                             <h5 class="card-title"><span class="material-icons align-bottom">copyright</span> Marcas</h5>
                         </a>
                         <p class="card-text">Administrar maestro de marcas para la compra mensual</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card mt-2">
+                    <div class="card-body">
+                        <a href="usuarios" class="text-decoration-none text-dark">
+                            <h5 class="card-title"><span class="material-symbols-outlined align-bottom">account_circle</span> Usuarios</h5>
+                        </a>
+                        <p class="card-text">Administrar maestro de usuarios del sistema</p>
 
                     </div>
                 </div>

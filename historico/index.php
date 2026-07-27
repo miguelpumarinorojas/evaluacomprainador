@@ -13,7 +13,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
-    <link rel="manifest" href="img/site.webmanifest">
+    <link rel="manifest" href="../img/site.webmanifest">
 
 </head>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0"></script>
@@ -49,27 +49,57 @@ include("../inc/connection.php");
         <div class="row">
             <div class="col">
                 <div class="card mt-2">
-                    <div class="card-body">
+                    <div class="card-header">
                         <h5 class="card-title"><span class="material-symbols-outlined align-bottom">search</span> Buscar historial de precios</h5>
                         <p class="card-text">Selecciona producto y fecha para buscar su historial de precios</p>
-                        <label for="">Producto</label>
-                        <select name="Producto" id="Producto" class="form-select select-beast" required>
-                            <option value=""></option>
-                            <?php
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <label for="">Producto</label>
+                                <select name="Producto" id="Producto" class="form-select select-beast" required>
+                                    <option value="">-Ninguno-</option>
+                                    <?php
 
-                            $query_select = "SELECT * FROM productos WHERE estado = 1 ORDER BY descripcion";
-                            $result_select = $conn->query($query_select);
+                                    $query_select = "SELECT * FROM productos WHERE estado = 1 ORDER BY descripcion";
+                                    $result_select = $conn->query($query_select);
 
-                            if ($result_select->num_rows > 0) {
-                                while ($row = $result_select->fetch_assoc()) { ?>
-                                    <option value="<?php echo $row['id']; ?>"><?php echo $row['descripcion']; ?></option>
-                                <?php }
-                            } else { ?>
-                                <option value="">No se encontraron productos</option>
-                            <?php }
-                            // $conn->close();
-                            ?>
-                        </select>
+                                    if ($result_select->num_rows > 0) {
+                                        while ($row = $result_select->fetch_assoc()) { ?>
+                                            <option value="<?php echo $row['id']; ?>"><?php echo $row['descripcion']; ?></option>
+                                        <?php }
+                                    } else { ?>
+                                        <option value="">No se encontraron productos</option>
+                                    <?php }
+                                    // $conn->close();
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="">Supermercado</label>
+                                <select name="Supermercado" id="Supermercado" class="form-select select-beast" required>
+                                    <option value="">-Ninguno-</option>
+                                    <?php
+
+                                    $query_select = "SELECT * FROM supermercados WHERE estado = 1 ORDER BY descripcion";
+                                    $result_select = $conn->query($query_select);
+
+                                    if ($result_select->num_rows > 0) {
+                                        while ($row = $result_select->fetch_assoc()) { ?>
+                                            <option value="<?php echo $row['id']; ?>"><?php echo $row['descripcion']; ?></option>
+                                        <?php }
+                                    } else { ?>
+                                        <option value="">No se encontraron supermercados</option>
+                                    <?php }
+                                    // $conn->close();
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="">Fecha</label>
+                                <input type="month" name="Fecha" id="Fecha" class="form-control" required>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -107,6 +137,7 @@ include("../inc/connection.php");
         document.querySelectorAll('select[class*="select-beast"]').forEach(el => {
             new TomSelect(el, {
                 create: true,
+                allowEmptyOption: true,
                 sortField: {
                     field: "text",
                     direction: "asc"
@@ -165,73 +196,6 @@ include("../inc/connection.php");
                 maximumFractionDigits: 0
             }).format(monto);
         }
-        const ctx = document.getElementById('myChart_barras').getContext('2d');
-        fetch('grafico_circular.php') // tu archivo PHP
-            .then(response => response.json())
-            .then(data => {
-                // Extraer labels y valores desde el JSON
-                const labels = data.map(item => formatearLabelMesAnio(item.categorias));
-                const valores = data.map(item => parsearMonto(item.total_mensual));
-
-                // Generar un array de colores dinámico, uno por cada label
-                const colores = labels.map((_, i) => {
-                    const palette = [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(153, 102, 255)',
-                        'rgb(255, 159, 64)'
-                    ];
-                    // Ciclar la paleta si hay más labels que colores
-                    return palette[i % palette.length];
-                });
-
-
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Suma por Categoría',
-                            data: valores,
-                            borderWidth: 1,
-                            borderColor: 'black',
-                            backgroundColor: colores,
-                        }]
-                    },
-                    options: {
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: (context) => {
-                                        const etiqueta = context.dataset.label ? context.dataset.label + ': ' : '';
-                                        return etiqueta + formatearMonedaCLP(context.parsed.y);
-                                    }
-                                }
-                            },
-                            datalabels: {
-                                anchor: 'end', // posición del label
-                                align: 'top', // alineación sobre la barra
-                                formatter: (value) => formatearMonedaCLP(value),
-                                color: 'black',
-                                font: {
-                                    weight: 'bold'
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: (value) => formatearMonedaCLP(value)
-                                }
-                            }
-                        }
-                    }
-                });
-            })
-            .catch(error => console.error('Error:', error));
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
@@ -239,9 +203,10 @@ include("../inc/connection.php");
     <script>
         $(document).ready(function() {
             CARGALISTAPRODUCTOS();
-            $('#Producto').change(function() {
-                console.log('Producto cambiado a: ' + $(this).val());
+            $('#Producto, #Supermercado, #Fecha').change(function() {
+                // console.log('Producto cambiado a: ' + $(this).val());
                 CARGALISTAPRODUCTOS();
+                CARGAGRAFICOCIRCULAR();
             });
         });
 
@@ -250,23 +215,113 @@ include("../inc/connection.php");
             $.ajax({
                 type: "POST",
                 url: "listaProductosPrecios.php",
-                data: "PRODUCTO=" + $('#Producto').val(),
+                data: "PRODUCTO=" + $('#Producto').val() + "&SUPERMERCADO=" + $('#Supermercado').val() + "&FECHA_INICIO=" + $('#Fecha').val(),
+                dataType: "html",
                 success: function(r) {
                     $('#TABLA_PRODUCTOS_PRECIOS').html(r);
                 }
             });
         }
-        // function CARGALISTAPRODUCTOS() {
-        //     $('#TABLA_PRODUCTOS_PRECIOS').html('<div class="d-flex justify-content-center"><div class="spinner-border text-primary" style="width: 4rem; height: 4rem;" role="status"><span class="visually-hidden">Loading...</span></div></div>');
-        //     $.ajax({
-        //         type: "POST",
-        //         url: "grafico_circular.php",
-        //         data: "PRODUCTO=" + $('#Producto').val(),
-        //         success: function(r) {
-        //             $('#TABLA_PRODUCTOS_PRECIOS').html(r);
-        //         }
-        //     });
-        // }
+        // Variable global para guardar la instancia del gráfico
+        let chartCircular;
+
+        function CARGAGRAFICOCIRCULAR() {
+            $('#TABLA_PRODUCTOS_PRECIOS').html(
+                '<div class="d-flex justify-content-center">' +
+                '<div class="spinner-border text-primary" style="width: 4rem; height: 4rem;" role="status">' +
+                '<span class="visually-hidden">Loading...</span></div></div>'
+            );
+
+            $.ajax({
+                type: "POST",
+                url: "grafico_circular.php",
+                data: {
+                    producto: $('#Producto').val()
+                }, // enviar parámetro
+                dataType: "json",
+                success: function(data) {
+                    const labels = data.map(item => formatearLabelMesAnio(item.descr_supermercado));
+                    const valores = data.map(item => parsearMonto(item.precio_promedio));
+
+                    const colores = labels.map((_, i) => {
+                        const palette = [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(153, 102, 255)',
+                            'rgb(255, 159, 64)'
+                        ];
+                        return palette[i % palette.length];
+                    });
+
+                    const ctx = document.getElementById('myChart_barras').getContext('2d');
+
+                    if (chartCircular) {
+                        // Actualizar gráfico existente
+                        chartCircular.data.labels = labels;
+                        chartCircular.data.datasets[0].data = valores;
+                        chartCircular.data.datasets[0].backgroundColor = colores;
+                        chartCircular.update();
+                    } else {
+                        // Crear gráfico la primera vez
+                        chartCircular = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Precio promedio por supermercado',
+                                    data: valores,
+                                    borderWidth: 1,
+                                    borderColor: 'black',
+                                    backgroundColor: colores
+                                }]
+                            },
+                            options: {
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            label: (context) => {
+                                                const etiqueta = context.dataset.label ? context.dataset.label + ': ' : '';
+                                                return etiqueta + formatearMonedaCLP(context.parsed.y);
+                                            }
+                                        }
+                                    },
+                                    datalabels: {
+                                        anchor: 'end',
+                                        align: 'top',
+                                        formatter: (value) => formatearMonedaCLP(value),
+                                        color: 'black',
+                                        font: {
+                                            weight: 'bold'
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: {
+                                            callback: (value) => formatearMonedaCLP(value)
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    $('#TABLA_PRODUCTOS_PRECIOS').html('');
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                    $('#TABLA_PRODUCTOS_PRECIOS').html('<p class="text-danger">Error al cargar datos</p>');
+                }
+            });
+        }
+
+        // Enganchar la función al evento change del selector
+        $('#Producto').on('change', function() {
+            CARGAGRAFICOCIRCULAR();
+        });
     </script>
 </body>
 
