@@ -30,8 +30,8 @@ include("../../inc/connection.php");
                     <td>
                         <!-- <a href="editarCategoria.php?id=<?php //echo $row['id']; 
                                                                 ?>" class="btn btn-success btn-sm"><span class="material-icons align-bottom">edit</span></a> -->
-                        <button href="eliminarcategoria.php?id=<?php echo $row['id']; ?>" class="btn text-danger" title="Presione para eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta categoría?');"><span class="material-symbols-outlined align-bottom">delete</span>
-                        </button>
+                        <a href="eliminarcategoria.php?id=<?php echo $row['id']; ?>" class="btn text-danger" title="Presione para eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta categoría?');"><span class="material-symbols-outlined align-bottom">delete</span>
+                        </a>
                     </td>
                 </tr>
             <?php }

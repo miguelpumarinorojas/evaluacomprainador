@@ -149,7 +149,6 @@ session_variable('../../');
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     <script>
