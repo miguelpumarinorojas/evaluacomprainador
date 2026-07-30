@@ -95,6 +95,7 @@ include("../inc/connection.php");
       while ($row = $execute_nombre->fetch_assoc()) {
         $result_nombre = $row['nombre'];
         $result_mail = $row['email'];
+        $result_perfil = $row['perfil'];
       };
 
       //VALIDA QUE PASSWORD INGRESADO SEA IGUAL AL REGISTRADO EN BD
@@ -105,6 +106,7 @@ include("../inc/connection.php");
         $_SESSION['expire'] = $_SESSION['start'] + (100 * 120);
         $_SESSION['nombre'] = $result_nombre;
         $_SESSION['email'] = $result_mail;
+        $_SESSION['perfil'] = $result_perfil;
         $_SESSION['timeout'] = time();
         header("Location:../");
       } else {

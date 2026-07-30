@@ -33,7 +33,7 @@ include("../inc/connection.php");
             <div>
                 <span class="navbar-brand mb-0 h1"><span class="material-icons align-bottom">shopping_cart</span> EvaluaCompraInador</span>
                 <br>
-                <span class="navbar-text">Bienvenido: <?php echo $_SESSION['nombre']; ?></span>
+                <span class="navbar-text">Bienvenido: <?php echo $_SESSION['nombre'] ?> - Perfil: <?php echo $_SESSION['perfil'] == 1 ? 'Administrador' : 'Usuario'; ?></span>
             </div>
             <div class="badge align-bottom">
                 <a href='../login/logout.php' class="text-white text-decoration-none">

@@ -28,9 +28,9 @@ session_variable('../../');
     if (isset($_POST['btnRegistrar']) && !empty($_POST['NombreUsuario']) && !empty($_POST['EmailUsuario']) && !empty($_POST['PasswordUsuario'])) {
         $nombreUsuario = $_POST['NombreUsuario'];
         $emailUsuario = $_POST['EmailUsuario'];
-        $passwordUsuario= md5($_POST['PasswordUsuario']);
+        $passwordUsuario = md5($_POST['PasswordUsuario']);
+        $perfilUsuario = $_POST['PerfilUsuario'];
 
-        // Aquí puedes realizar la lógica para guardar la unidad en la base de datos o realizar otras acciones necesarias.
         $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
         if ($conn->connect_error) {
             die("Conexión fallida: " . $conn->connect_error);
@@ -52,8 +52,8 @@ session_variable('../../');
 
 
             $estadoUsuario = 1; // Asignar un valor predeterminado para el estado de la unidad
-            $stmt = $conn->prepare("INSERT INTO usuarios (nombre, email, password, estado) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("sssi", $nombreUsuario, $emailUsuario, $passwordUsuario,$estadoUsuario);
+            $stmt = $conn->prepare("INSERT INTO usuarios (nombre, email, password, perfil, estado) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssii", $nombreUsuario, $emailUsuario, $passwordUsuario, $perfilUsuario, $estadoUsuario);
             $stmt->execute();
             $stmt->close();
             $conn->close();
@@ -77,7 +77,7 @@ session_variable('../../');
             <div>
                 <span class="navbar-brand mb-0 h1"><span class="material-icons align-bottom">shopping_cart</span> EvaluaCompraInador</span>
                 <br>
-                <span class="navbar-text">Bienvenido: <?php echo $_SESSION['nombre']; ?></span>
+                <span class="navbar-text">Bienvenido: <?php echo $_SESSION['nombre'] ?> - Perfil: <?php echo $_SESSION['perfil'] == 1 ? 'Administrador' : 'Usuario'; ?></span>
             </div>
             <div class="badge align-bottom">
                 <a href='../../login/logout.php' class="text-white text-decoration-none">
@@ -119,6 +119,20 @@ session_variable('../../');
                                         <input type="text" class="form-control" id="NombreUsuario" name="NombreUsuario" placeholder="Nombre de usuario" maxlength="20" required>
                                         <div class="invalid-feedback">
                                             Ingrese el nombre de usuario.
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="CodigoUnidad" class="form-label"><span class="material-symbols-outlined align-bottom">admin_panel_settings</span> Perfil usuario</label>
+                                        <select class="form-control" id="PerfilUsuario" name="PerfilUsuario" required>
+                                            <option value="">Seleccione un perfil</option>
+                                            <option value="1">Administrador</option>
+                                            <option value="2">Usuario</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Seleccione el perfil del usuario.
                                         </div>
                                     </div>
 

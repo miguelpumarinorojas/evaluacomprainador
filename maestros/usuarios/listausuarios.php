@@ -11,6 +11,7 @@ include("../../inc/connection.php");
             <th width="50">N°</th>
             <th width="200">Email</th>
             <th>Nombre</th>
+            <th>Perfil</th>
             <th>Fecha Creacion</th>
             <th width="100">Estado</th>
             <th width="100">Acciones</th>
@@ -27,6 +28,7 @@ include("../../inc/connection.php");
                     <td><?php echo $numero++; ?></td>
                     <td><?php echo $row['email']; ?></td>
                     <td><?php echo $row['nombre']; ?></td>
+                    <td><?php echo $row['perfil'] == 1 ? 'Administrador' : 'Usuario'; ?></td>
                     <td><?php echo $row['fecha_creacion']; ?></td>
                     <td><?php echo $row['estado'] == 1 ? 'Activo' : 'Inactivo'; ?></td>
                     <td>
