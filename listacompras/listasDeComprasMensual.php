@@ -80,6 +80,22 @@ $fecha_cotizacion = $_POST['FECHA_COTIZACION'];
         ?>
     </tbody>
 </table>
+<form method="POST" action="registrarCompra.php" onsubmit="return confirm('¿Está seguro de registrar esta compra?');">
+    <div class="card-footer text-end">
+        <div class="d-grid gap-2">
+            <?php if ($fecha_cotizacion != '' && $result->num_rows > 0) { ?>
+                <a href="listar.php?mes_compra=<?php echo $fecha_cotizacion; ?>" target="_blank" class="btn btn-outline-danger" name="btnRegistrarCompra">
+                    <span class="material-icons align-bottom">picture_as_pdf</span> Generar PDF
+                </a>
+            <?php } else { ?>
+                <button target="_blank" class="btn btn-outline-secondary" name="btnRegistrarCompra" disabled>
+                    <span class="material-icons align-bottom">block</span> Selecciona un mes y año para generar PDF
+                </button>
+            <?php   } ?>
+
+        </div>
+    </div>
+</form>
 <script>
     $(document).ready(function() {
         $('#seleccionar-todos').click(function() {

@@ -103,16 +103,18 @@ session_variable('');
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="card mt-2">
-                    <div class="card-body">
-                        <a href="maestros" class="text-decoration-none text-dark">
-                            <h5 class="card-title"><span class="material-symbols-outlined align-bottom">list_alt</span> Maestros</h5>
-                        </a>
-                        <p class="card-text">Administrar maestros para la compra mensual</p>
+            <?php if ($_SESSION['perfil'] == 1) { ?>
+                <div class="col">
+                    <div class="card mt-2">
+                        <div class="card-body">
+                            <a href="maestros" class="text-decoration-none text-dark">
+                                <h5 class="card-title"><span class="material-symbols-outlined align-bottom">list_alt</span> Maestros</h5>
+                            </a>
+                            <p class="card-text">Administrar maestros para la compra mensual</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php } ?>
         </div>
     </div>
 
