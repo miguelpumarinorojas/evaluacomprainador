@@ -86,6 +86,19 @@ session_variable('');
             <div class="col">
                 <div class="card mt-2">
                     <div class="card-body">
+                        <a href="comprasnoplanificadas" class="text-decoration-none text-dark">
+                            <h5 class="card-title"><span class="material-symbols-outlined align-bottom">looks_4</span> Compras no planificadas</h5>
+                        </a>
+                        <p class="card-text">Ingresar compras mensuales no planificadas</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card mt-2">
+                    <div class="card-body">
                         <a href="dashboard" class="text-decoration-none text-dark">
                             <h5 class="card-title"><span class="material-symbols-outlined align-bottom">finance</span> Dashboard</h5>
                         </a>
