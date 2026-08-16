@@ -32,71 +32,14 @@ session_variable('../');
 
     if (isset($_POST['btnRegistrar'])) {
 
-
         include("../inc/connection.php");
         include("../inc/funciones.php");
 
-        if (!empty($_POST['productos']) && !empty($_POST['cantidades'])) {
-            $productos   = $_POST['productos'];
-            $cantidades = $_POST['cantidades'];
-
-            // Recorrer ambos arrays con el mismo índice
-            foreach ($productos as $i => $producto) {
-                $cantidad = isset($cantidades[$i]) ? $cantidades[$i] : 0;
-
-                // Validar que el producto no esté vacío
-                if (!empty($producto)) {
-
-                    $check = "SELECT id FROM lista_compras_mensual 
-                  WHERE mes_compra = '$fecha_cotizacion' 
-                  AND producto = '$producto' 
-                  LIMIT 1";
-                    $res = $conn->query($check);
-
-                    if ($res->num_rows > 0) {
-                        // Ya existe el registro
-                        if ($cantidad > 0) {
-                            // Actualizar cantidad
-                            $query = "UPDATE lista_compras_mensual 
-                          SET cantidad = $cantidad, 
-                              fecha_creacion = NOW(), 
-                              estado = 1 
-                          WHERE mes_compra = '$fecha_cotizacion' 
-                          AND producto = '$producto'";
-                        } else {
-                            // Eliminar si la cantidad es cero o vacía
-                            $query = "DELETE FROM lista_compras_mensual 
-                          WHERE mes_compra = '$fecha_cotizacion' 
-                          AND producto = '$producto'";
-                        }
-                    } else {
-                        // No existe el registro, insertar solo si cantidad > 0
-                        if ($cantidad > 0) {
-                            $query = "INSERT INTO lista_compras_mensual 
-                          (fecha_creacion, mes_compra, producto, cantidad, estado) 
-                          VALUES (NOW(), '$fecha_cotizacion', '$producto', $cantidad, 1)";
-                        } else {
-                            $query = null; // no hacer nada si no existe y cantidad = 0
-                        }
-                    }
-
-                    // Ejecutar la query si corresponde
-                    if ($query) {
-                        $executionResult = $conn->query($query);
-                        if (!$executionResult) {
-                            $alertaAdvertencia = "Error al registrar la lista de compras mensual: " . $conn->error;
-                        }
-                    }
-                }
-            }
-        } else { ?>
-            <div class='alert alert-danger notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
-                No seleccionaste ningun producto! <span class="material-icons align-bottom">warning</span>
-            </div>
-        <?php  }
-
-        $conn->close();
-
+            $stmtGenerar = $conn->prepare("CALL sp_crea_lista_precios_mensual(?)");
+            $stmtGenerar->bind_param("s", $fecha_cotizacion);
+            $stmtGenerar->execute();
+            $stmtGenerar->close();
+            $conn->close();
 
         ?>
         <div class='alert alert-success notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
@@ -104,7 +47,6 @@ session_variable('../');
         </div>
     <?php  }
     //}
-
 
 
 
@@ -218,7 +160,7 @@ session_variable('../');
         $(document).ready(function() {
             CARGALISTACOTIZACIONES();
             $('#fechaCotizacion').change(function() {
-                console.log('Fecha de cotización cambiada a: ' + $(this).val());
+                // console.log('Fecha de cotización cambiada a: ' + $(this).val());
                 CARGALISTACOTIZACIONES();
             });
         });
@@ -234,14 +176,103 @@ session_variable('../');
                 }
             });
         }
+
+        (function() {
+            const endpoint = 'actualizarCampoListaCompras.php';
+
+            function normalizarValor(campo, valor) {
+                if (valor === null || valor === undefined) {
+                    return '';
+                }
+
+                if (campo === 'precio' || campo === 'capacidad' || campo === 'cantidad') {
+                    const limpio = String(valor).trim();
+                    return limpio === '' ? '0' : limpio;
+                }
+
+                return String(valor);
+            }
+
+            async function guardarCambio(datos) {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    body: new URLSearchParams(datos)
+                });
+
+                const payload = await response.json();
+
+                if (!response.ok || !payload.success) {
+                    throw new Error(payload.message || 'No se pudo guardar el cambio.');
+                }
+
+                return payload;
+            }
+
+            function registrarAutosave(elemento) {
+                const campo = elemento.dataset.field;
+                const valor = normalizarValor(campo, elemento.value);
+
+                if (elemento.dataset.registroId) {
+                    if (valor === '' && campo !== 'precio') {
+                        return;
+                    }
+
+                    return guardarCambio({
+                        action: 'actualizar_por_id',
+                        id: elemento.dataset.registroId,
+                        campo: campo,
+                        valor: valor
+                    }).catch((error) => {
+                        alert(error.message);
+                    });
+                }
+
+                if (elemento.dataset.idProducto && elemento.dataset.mesCompra) {
+                    if (valor === '' && campo !== 'precio') {
+                        return;
+                    }
+
+                    return guardarCambio({
+                        action: 'actualizar_por_producto',
+                        id_producto: elemento.dataset.idProducto,
+                        mes_compra: elemento.dataset.mesCompra,
+                        campo: campo,
+                        valor: valor
+                    }).catch((error) => {
+                        alert(error.message);
+                    });
+                }
+            }
+
+            document.addEventListener('change', function(event) {
+                const elemento = event.target.closest('.js-autosave-producto, .js-autosave-precio');
+                if (!elemento) {
+                    return;
+                }
+
+                if (elemento.tagName === 'SELECT') {
+                    registrarAutosave(elemento);
+                }
+            });
+
+            document.addEventListener('blur', function(event) {
+                const elemento = event.target.closest('.js-autosave-producto, .js-autosave-precio');
+                if (!elemento || elemento.tagName === 'SELECT') {
+                    return;
+                }
+
+                registrarAutosave(elemento);
+            }, true);
+        })();
     </script>
     <script>
         $(document).ready(function() {
-            $('#fechaCotizacion').change({
-                function() {
-                    var fechaSeleccionada = $(this).val();
-                    console.log("Fecha seleccionada: " + fechaSeleccionada); // Agrega esta línea para depuración
-                }
+            $('#fechaCotizacion').on('change', function() {
+                var fechaSeleccionada = $(this).val();
+                // console.log("Fecha seleccionada: " + fechaSeleccionada); // Agrega esta línea para depuración
             });
         });
     </script>

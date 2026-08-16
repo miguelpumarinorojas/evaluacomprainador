@@ -161,7 +161,9 @@ session_variable('../../');
                             </div>
                         </div>
                         <div class="card-footer text-end">
-                            <button type="submit" class="btn btn-success" name="btnRegistrar"><span class="material-icons align-bottom">save</span> Registrar</button>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success" name="btnRegistrar"><span class="material-icons align-bottom">save</span> Registrar</button>
+                            </div>
                         </div>
                     </div>
                 </form>

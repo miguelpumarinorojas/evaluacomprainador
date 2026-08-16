@@ -86,7 +86,9 @@ class PDF extends FPDF
       $this->renderCabeceraTabla($header, $colWidths);
 
       $numero = 1;
+      $totalSupermercado = 0;
       foreach ($rows as $row) {
+         $totalSupermercado += (float) $row['total_por_producto'];
          $values = array(
             $numero++,
             $row['descripcion_producto'],
@@ -101,6 +103,11 @@ class PDF extends FPDF
 
          $this->renderFilaTabla($values, $colWidths);
       }
+
+      $this->SetFont('Arial', 'B', 9);
+      $this->Cell($colWidths[0] + $colWidths[1] + $colWidths[2] + $colWidths[3] + $colWidths[4] + $colWidths[5] + $colWidths[6] + $colWidths[7], 7, 'Total', 1, 0, 'R');
+      $this->Cell($colWidths[8], 7, formatoMonedaCLP($totalSupermercado), 1, 0, 'C');
+      $this->Ln();
    }
 
    //cuerpo
@@ -137,7 +144,7 @@ class PDF extends FPDF
         INNER JOIN categorias t5 ON t2.categoria = t5.id
         INNER JOIN marcas t6 ON t1.marca = t6.id
         WHERE t1.estado = 0 and t1.fecha_cotizacion = '" . $this->mes_compra_query . "'
-        ORDER BY t3.descripcion, t5.descripcion, t2.descripcion";
+        ORDER BY t3.descripcion,t2.descripcion,  t5.descripcion";
 
       $resultado = $conexion->query($sql);
 

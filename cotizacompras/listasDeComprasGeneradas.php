@@ -13,7 +13,7 @@ $fecha_cotizacion = $_POST['FECHA_COTIZACION'];
     <thead class="table-dark sticky-top">
         <tr>
             <th class="text-center">Supermercado</th>
-            <th>Fecha Creación</th>
+            <!-- <th>Fecha Creación</th> -->
             <th>Mes-Año</th>
             <th>Productos Cotizados</th>
             <th width="5">Eliminar</th>
@@ -22,15 +22,15 @@ $fecha_cotizacion = $_POST['FECHA_COTIZACION'];
     <tbody>
         <?php
         $query = "SELECT 	DISTINCT    t2.logo,
-                                        t1.fecha_creacion,
+                                        -- MAX(t1.fecha_creacion) AS fecha_creacion,
                                         t1.mes_compra, 
                                         t2.id id_supermercado, 
                                         t2.descripcion descripcion_supermercado,
                                         (SELECT COUNT(*) 
                                         FROM cotizador_mensual WHERE cotizador_mensual.mes_compra = t1.mes_compra AND cotizador_mensual.supermercado = t1.supermercado
-                                        AND  cotizador_mensual.precio <> 0) productos_cotizados,
+                                        AND  cotizador_mensual.precio <> 0 and estado = 1) productos_cotizados,
                                         (SELECT COUNT(*) 
-                                        FROM cotizador_mensual WHERE cotizador_mensual.mes_compra = t1.mes_compra AND cotizador_mensual.supermercado = t1.supermercado) productos_total
+                                        FROM cotizador_mensual WHERE cotizador_mensual.mes_compra = t1.mes_compra AND cotizador_mensual.supermercado = t1.supermercado and estado = 1) productos_total
                     FROM cotizador_mensual t1 	inner join supermercados t2 on t2.id = t1.supermercado
                     WHERE t1.mes_compra = '" . $fecha_cotizacion . "'
                     ORDER BY 1,3";
@@ -46,7 +46,7 @@ $fecha_cotizacion = $_POST['FECHA_COTIZACION'];
                             <img href="../cotizador/index.php?mes_compra=<?php echo urlencode($row_ppal['mes_compra']); ?>&supermercado=<?php echo urlencode($row_ppal['id_supermercado']); ?>" src="../maestros/supermercados/<?php echo $row_ppal['logo']; ?>" height="50" alt="Logo del supermercado">
                         </a>
                     </td>
-                    <td><?php echo formatoFechaHoraDMY($row_ppal['fecha_creacion']); ?></td>
+                    <!-- <td><?php // echo formatoFechaHoraDMY($row_ppal['fecha_creacion']); ?></td> -->
                     <td><?php echo formatoMesAño($row_ppal['mes_compra']); ?></td>
                     <td><?php echo $row_ppal['productos_cotizados']; ?> de <?php echo $row_ppal['productos_total']; ?></td>
                     <td>

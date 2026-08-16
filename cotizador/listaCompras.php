@@ -44,6 +44,7 @@ $supermercado = $_GET['supermercado'] ?? '';
                                                 inner join productos t3 on t3.id = t1.producto
                                                 inner join categorias t4 on t4.id = t3.categoria
                     WHERE t1.mes_compra = '$mes_compra' AND t1.supermercado = '$supermercado'
+                    and t1.estado = 1
                     ORDER BY 6,4";
         $result = $conn->query($query);
         if ($result->num_rows > 0) {

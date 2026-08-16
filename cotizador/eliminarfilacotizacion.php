@@ -9,7 +9,7 @@ if (isset($_POST['btnEliminar'])) {
 
     $id = $_POST['id'];
 
-    $stmt = $conn->prepare("DELETE FROM cotizador_mensual WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE cotizador_mensual SET estado = 0 WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $stmt->close();

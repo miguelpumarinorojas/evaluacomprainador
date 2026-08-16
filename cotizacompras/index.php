@@ -37,9 +37,6 @@ session_variable('../');
 
     if (isset($_POST['btnRegistrar'])) {
 
-        
-
-
         $confirmarGeneracion = isset($_POST['confirmar_generar']) && $_POST['confirmar_generar'] === '1';
         $fechaCotizacionInput = trim($_POST['fechaCotizacion']);
         $fechaCotizacionDate = DateTime::createFromFormat('d-m-Y', $fechaCotizacionInput);
@@ -103,24 +100,76 @@ session_variable('../');
 
         if (!$requiereConfirmacion) {
     ?>
-        <div class='alert alert-success notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
-            Cotización generada exitosamente! <span class="material-icons align-bottom">done</span>
-        </div>
-    <?php }
-    }
-    //}
-
-
-
-
-    // echo $_POST['NombreProducto'] ?? 'No se ha enviado ningún nombre de producto.';
-
-    ?>
-    <?php if (!empty($alertaAdvertencia)) { ?>
-            <div class="alert alert-warning alert-dismissible notification fade show text-center" role="alert">
-                <?php echo $alertaAdvertencia; ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class='alert alert-success notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
+                Cotización generada exitosamente! <span class="material-icons align-bottom">done</span>
             </div>
+        <?php }
+    }
+
+    if (isset($_POST['btnAgregarProductos'])) {
+
+        $confirmarGeneracion = isset($_POST['confirmar_generar']) && $_POST['confirmar_generar'] === '1';
+        $fechaCotizacionInput = trim($_POST['fechaCotizacion']);
+        $fechaCotizacionDate = DateTime::createFromFormat('d-m-Y', $fechaCotizacionInput);
+        if ($fechaCotizacionDate instanceof DateTime) {
+            $fechaCotizacionFormateada = $fechaCotizacionDate->format('Y-m-d');
+        } else {
+            $fechaCotizacionIso = DateTime::createFromFormat('Y-m-d', $fechaCotizacionInput);
+            $fechaCotizacionFormateada = $fechaCotizacionIso instanceof DateTime ? $fechaCotizacionIso->format('Y-m-d') : $fechaCotizacionInput;
+        }
+        $supermercados = $_POST['Supermercado'] ?? [];
+        if (!is_array($supermercados)) {
+            $supermercados = [$supermercados];
+        }
+        $supermercados = array_values(array_filter($supermercados, static function ($valor) {
+            return $valor !== '' && $valor !== null;
+        }));
+        $fechaPersist = $fechaCotizacionInput;
+        $supermercadoPersist = $supermercados;
+
+        // Aquí puedes realizar la lógica para guardar el producto en la base de datos o realizar otras acciones necesarias. 
+        $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
+        if ($conn->connect_error) {
+            die("Conexión fallida: " . $conn->connect_error);
+        }
+
+        if (count($supermercados) === 0) {
+            $conn->close();
+            die("Debe seleccionar al menos un supermercado.");
+        }
+
+        $listaSupermercados = implode(',', array_map('intval', $supermercados));
+
+        $stmtGenerar = $conn->prepare("CALL sp_generar_precios_complementario(?, ?)");
+        if (!$stmtGenerar) {
+            $conn->close();
+            die("No se pudo preparar el procedimiento almacenado.");
+        }
+
+        $stmtGenerar->bind_param("si", $fechaCotizacionFormateada, $listaSupermercados);
+        $stmtGenerar->execute();
+        $stmtGenerar->close();
+
+        while ($conn->more_results() && $conn->next_result()) {
+            if ($res = $conn->store_result()) {
+                $res->free();
+            }
+        }
+        ?>
+
+        <div class='alert alert-success notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
+            Productos agregados exitosamente! <span class="material-icons align-bottom">done</span>
+        </div>
+
+    <?php  }   ?>
+
+
+
+    <?php if (!empty($alertaAdvertencia)) { ?>
+        <div class="alert alert-warning alert-dismissible notification fade show text-center" role="alert">
+            <?php echo $alertaAdvertencia; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     <?php } ?>
     <nav class="navbar bg-dark navbar-dark">
         <div class="container-fluid">
@@ -149,7 +198,7 @@ session_variable('../');
         </ol>
     </nav>
     <div class="container-fluid">
-                <div class="row pt-2">
+        <div class="row pt-2">
             <div class="col">
                 <form action="" method="POST" class="needs-validation" autocomplete="off" enctype="multipart/form-data" novalidate>
                     <div class="card">
@@ -161,8 +210,8 @@ session_variable('../');
                                 <div class="col">
                                     <div class="mb-3">
                                         <label for="fechaCotizacion" class="form-label"><span class="material-icons align-bottom">calendar_today</span> Fecha</label>
-                                        <input type="month" class="form-control" id="fechaCotizacion" name="fechaCotizacion" 
-                                        value="<?php  echo $mes_compra;?>" required autofocus>
+                                        <input type="month" class="form-control" id="fechaCotizacion" name="fechaCotizacion"
+                                            value="<?php echo $mes_compra; ?>" required autofocus>
                                         <div class="invalid-feedback">
                                             Seleccione una fecha.
                                         </div>
@@ -190,19 +239,20 @@ session_variable('../');
                                     </div>
                                 </div>
                             </div>
-                        <div class="card-footer text-end">
-                            <div class="d-grid gap-2">
+                            <div class="card-footer text-end">
                                 <?php if ($requiereConfirmacion) { ?>
                                     <input type="hidden" name="confirmar_generar" value="1">
                                     <button type="submit" class="btn btn-warning" name="btnRegistrar" value="1" formaction="">
                                         <span class="material-icons align-bottom">warning</span> Confirmar y generar lista de cotización
                                     </button>
                                 <?php } else { ?>
-                                    <button type="submit" class="btn btn-success" name="btnRegistrar"><span class="material-icons align-bottom">add</span> Generar lista de cotización</button>
+                                    <button type="submit" class="btn btn-success" name="btnRegistrar"><span class="material-symbols-outlined align-bottom">article</span> Generar lista de cotización</button>
                                 <?php } ?>
+                                <button type="submit" class="btn btn-primary" name="btnAgregarProductos">
+                                    <span class="material-symbols-outlined align-bottom">add_notes</span> Agregar productos a lista de cotización
+                                </button>
                             </div>
                         </div>
-                    </div>
                 </form>
             </div>
         </div>
@@ -214,7 +264,8 @@ session_variable('../');
                     </div>
                     <div class="card-body">
                         <div id="TABLA_DE_COMPRAS"></div>
-                        <?php //include("listasDeComprasGeneradas.php"); ?>
+                        <?php //include("listasDeComprasGeneradas.php"); 
+                        ?>
                     </div>
                 </div>
             </div>
@@ -250,7 +301,7 @@ session_variable('../');
         $(document).ready(function() {
             CARGALISTACOTIZACIONES();
             $('#fechaCotizacion').change(function() {
-            console.log('Fecha de cotización cambiada a: ' + $(this).val());
+                console.log('Fecha de cotización cambiada a: ' + $(this).val());
                 CARGALISTACOTIZACIONES();
             });
         });
