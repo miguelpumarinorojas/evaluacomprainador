@@ -1,3 +1,4 @@
 # ignora la carpeta backups
 BACKUPS/
 login/conexion.php
+inc/connection.php
