@@ -40,7 +40,7 @@ session_variable('../');
             $precio = $_POST['precio'];
             $precioporum = $_POST['precioporum'];
             $observaciones = $_POST['observaciones'];
-            $total = $precio * $cantidad;
+            $total = round($precio * $cantidad, 0); // Calcular el total redondeado a 0 decimales
             $estado = 2; // Estado 2 para compras no planificadas
 
             // Insertar los datos en la tabla compras_no_planificadas

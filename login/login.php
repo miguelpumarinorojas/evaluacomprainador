@@ -1,10 +1,52 @@
 <?php
 session_start();
-
 include("../inc/connection.php");
 
-?>
+$status = isset($_GET['status']) ? $_GET['status'] : '';
 
+$invalidPassword = false;
+$invalidEmail = false;
+
+if (isset($_POST['BTN_LOGIN'])) {
+    $username = $_POST['MAIL_USUARIO'];
+    $password = md5($_POST['PASSWORD_USUARIO']);
+    $resultado = '';
+
+    // Valida si usuario está habilitado
+    $query_val_login = "SELECT * FROM usuarios WHERE email = ? AND estado = 1";
+    $stmt = $conn->prepare($query_val_login);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
+        $invalidEmail = true;
+    } else {
+        // Obtiene datos del usuario
+        $sql = "SELECT nombre, email, perfil, password FROM usuarios WHERE email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $user = $stmt->get_result()->fetch_assoc();
+
+        if ($user && $password === $user['password']) {
+            $_SESSION['loggedin'] = true;
+            $_SESSION['start'] = time();
+            $_SESSION['expire'] = $_SESSION['start'] + (100 * 120);
+            $_SESSION['nombre'] = $user['nombre'];
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['perfil'] = $user['perfil'];
+            $_SESSION['timeout'] = time();
+
+            // 🚨 Importante: redirigir ANTES de enviar HTML
+            header("Location: ../index.php");
+            exit;
+        } else {
+            $invalidPassword = true;
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -56,64 +98,12 @@ include("../inc/connection.php");
 </head>
 
 <body>
-  <?php
-
-  error_reporting(E_ALL);
-
-  $invalidPassword = false;
-  $invalidEmail = false;
-  if (isset($_POST['BTN_LOGIN'])) {
-
-    $username = $_POST['MAIL_USUARIO'];
-    $password = md5($_POST['PASSWORD_USUARIO']);
-    $resultado = '';
-
-    //VALIDA SI USUARIO ESTÁ HABILITADO PARA ACCEDER
-    $query_val_login = "SELECT * FROM usuarios WHERE email = '$_POST[MAIL_USUARIO]' AND estado = 1";
-    $execute_val_login = $conn->query($query_val_login);
-
-    while ($row = $execute_val_login->fetch_assoc()) {
-      $resultado = $row['email'];
-    };
-
-    if ($resultado == '') {
-      $invalidEmail = true;
-    } else {
-
-      //OBTIENE PASSWORD PARA USUARIO INGRESADO
-      $sql = "SELECT * FROM usuarios WHERE email = '$_POST[MAIL_USUARIO]'";
-      $exec = $conn->query($sql);
-
-      while ($row = $exec->fetch_assoc()) {
-        $resultado = $row['password'];
-      };
-
-      //OBTIENE NOMBRE DEL USUARIO
-      $query_nombre = "SELECT * FROM usuarios WHERE email = '$_POST[MAIL_USUARIO]'";
-      $execute_nombre = $conn->query($query_nombre);
-
-      while ($row = $execute_nombre->fetch_assoc()) {
-        $result_nombre = $row['nombre'];
-        $result_mail = $row['email'];
-        $result_perfil = $row['perfil'];
-      };
-
-      //VALIDA QUE PASSWORD INGRESADO SEA IGUAL AL REGISTRADO EN BD
-      if ($password == $resultado) {
-
-        $_SESSION['loggedin'] = true;
-        $_SESSION['start'] = time();
-        $_SESSION['expire'] = $_SESSION['start'] + (100 * 120);
-        $_SESSION['nombre'] = $result_nombre;
-        $_SESSION['email'] = $result_mail;
-        $_SESSION['perfil'] = $result_perfil;
-        $_SESSION['timeout'] = time();
-        header("Location:../");
-      } else {
-        $invalidPassword = true;
-      }
-    }
-  } ?>
+   <?php if ($status == 'inactive'): ?>
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Sesión finalizada:</strong> Has estado inactivo demasiado tiempo. Por favor inicia sesión nuevamente.
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<?php endif; ?>
   <div class="login-card text-center">
     <img src="../img/evaluacomprainador.png" alt="Logo Evaluacomprainador" class="login-logo" width="100%">
     <form class="needs-validation" action="login.php" method="POST" autocomplete="off" novalidate>
