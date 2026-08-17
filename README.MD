@@ -81,3 +81,11 @@ La aplicación usa la base de datos `evaluacomprainador`.
 
 - El proyecto está pensado para uso interno y administración de compras.
 - Los estilos y scripts se encuentran dentro de las carpetas `css/` y `JS/`.
+
+## Cambios recientes
+
+### 2026-08-16
+
+- Módulo `comprasnoplanificadas`: se alineó el campo de salida del formulario a `id="precioporum"` para compatibilidad con la función compartida de cálculo en `JS/calcularPrecio.js`.
+- Cálculo de precio por unidad de medida: el formulario actualiza `precio por UM` al modificar `capacidad` o `precio`, aplicando la fórmula `precio / capacidad` con redondeo sin decimales.
+- Corrección de recarga post-envío en `comprasnoplanificadas/index.php`: se evitó cerrar la conexión a base de datos durante el bloque POST antes de renderizar nuevamente los componentes del formulario.
