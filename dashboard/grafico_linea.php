@@ -1,14 +1,16 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 
-// Conexión a SQL Server con PDO
-$serverName = "localhost";
-$database   = "evaluacomprainador";
-$username   = "root";
-$password   = ""; // Cambia esto si tu contraseña es diferente
+include("../inc/connection.php");
+
+// // Conexión a SQL Server con PDO
+// $serverName = "localhost";
+// $database   = "evaluacomprainador";
+// $username   = "root";
+// $password   = ""; // Cambia esto si tu contraseña es diferente
 
 try {
-    $conn = new mysqli($serverName, $username, $password, $database);
+    // $conn = new mysqli($serverName, $username, $password, $database);
 
     // Ejemplo: obtener nombre y cantidad de votos
     $sql = "SELECT  fecha_cotizacion,
