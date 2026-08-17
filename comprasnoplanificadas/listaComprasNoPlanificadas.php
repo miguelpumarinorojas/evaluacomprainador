@@ -24,7 +24,6 @@ include("../inc/funciones.php");
             <th width="75">Total</th>
             <th width="200">Observaciones</th>
             <th width="75">Eliminar</th>
-
         </tr>
     </thead>
     <tbody>

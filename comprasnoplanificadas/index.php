@@ -23,7 +23,6 @@ session_variable('../');
     <!--datepicker css -->
     <link href="../css/bootstrap-datepicker.css" rel="stylesheet">
 </head>
-
 <body>
     <?php
 
