@@ -77,7 +77,6 @@ session_variable('');
                             <h5 class="card-title"><span class="material-symbols-outlined align-bottom">looks_3</span> Valorizar lista de compras</h5>
                         </a>
                         <p class="card-text">Generar lista de compras en base a evaluación de cotizaciones registradas por rango de fechas</p>
-
                     </div>
                 </div>
             </div>
