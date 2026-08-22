@@ -262,7 +262,7 @@ session_variable('../');
                     <div class="card-header bg-secondary text-white">
                         <span class="material-icons align-bottom">attach_money</span> Listas de cotizaciones generadas
                     </div>
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                         <div id="TABLA_DE_COMPRAS"></div>
                         <?php //include("listasDeComprasGeneradas.php"); 
                         ?>
