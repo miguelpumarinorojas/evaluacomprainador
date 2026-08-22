@@ -70,7 +70,7 @@ include("../inc/connection.php");
                         <div class="row">
                             <div class="col">
                                 <label for="">Producto</label>
-                                <select name="Producto" id="Producto" class="form-select select-beast" required>
+                                <select name="Producto" id="Producto" class="form-select">
                                     <option value="">-Ninguno-</option>
                                     <?php
 
@@ -90,7 +90,7 @@ include("../inc/connection.php");
                             </div>
                             <div class="col">
                                 <label for="">Supermercado</label>
-                                <select name="Supermercado" id="Supermercado" class="form-select select-beast" required>
+                                <select name="Supermercado" id="Supermercado" class="form-select">
                                     <option value="">-Ninguno-</option>
                                     <?php
 
@@ -124,7 +124,7 @@ include("../inc/connection.php");
                         <h5 class="card-title"><span class="material-symbols-outlined align-bottom">list_alt</span> Listado de precios de producto</h5>
                         <!-- <p class="card-text">Selecciona fecha y supermercado para registrar listas de cotizaciones</p> -->
                     </div>
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                         <div id="TABLA_PRODUCTOS_PRECIOS"></div>
                         <?php  // include('listaProductosPrecios.php'); 
                         ?>

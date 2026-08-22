@@ -4,14 +4,16 @@ header('Content-Type: application/json; charset=utf-8');
 // Recibir parámetro por POST
 $producto = isset($_POST['producto']) ? trim($_POST['producto']) : "";
 
+include("../inc/connection.php");
+
 // Conexión a MySQL con mysqli
-$serverName = "localhost";
-$database   = "evaluacomprainador";
-$username   = "root";
-$password   = ""; // Cambia esto si tu contraseña es diferente
+// $serverName = "localhost";
+// $database   = "evaluacomprainador";
+// $username   = "root";
+// $password   = ""; // Cambia esto si tu contraseña es diferente
 
 try {
-    $conn = new mysqli($serverName, $username, $password, $database);
+    // $conn = new mysqli($serverName, $username, $password, $database);
 
     // Construir SQL base
     $sql = "SELECT 	t3.descripcion descr_supermercado, 

@@ -95,7 +95,7 @@ session_variable('');
             </div>
         </div>
         <div class="row">
-            <div class="col">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card mt-2">
                     <div class="card-body">
                         <a href="dashboard" class="text-decoration-none text-dark">
@@ -105,7 +105,7 @@ session_variable('');
                     </div>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card mt-2">
                     <div class="card-body">
                         <a href="historico" class="text-decoration-none text-dark">
@@ -116,7 +116,7 @@ session_variable('');
                 </div>
             </div>
             <?php if ($_SESSION['perfil'] == 1) { ?>
-                <div class="col">
+                <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="card mt-2">
                         <div class="card-body">
                             <a href="maestros" class="text-decoration-none text-dark">

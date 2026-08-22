@@ -48,7 +48,7 @@ if ($producto === '') { ?>
                                                 inner join supermercados t3 on t1.supermercado = t3.id
                                                 inner join marcas t4 on t1.marca = t4.id
                                                 inner join unidades t5 on t5.id = t1.um
-                    WHERE   (t1.producto = '$producto') and 
+                    WHERE   (t1.producto = '$producto' or '$producto' = '') and 
                             (t1.supermercado = '$supermercado' or '$supermercado' = '') and 
                             (t1.mes_compra = '$fecha' or '$fecha' = '')
                     ORDER BY t1.precio
