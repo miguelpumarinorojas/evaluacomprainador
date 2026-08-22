@@ -21,7 +21,7 @@ session_variable('');
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
     <link rel="manifest" href="img/site.webmanifest">
 </head>
-
+cambio pequeño
 <body>
     <nav class="navbar bg-dark navbar-dark">
         <div class="container-fluid">
