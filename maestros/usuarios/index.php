@@ -31,7 +31,7 @@ session_variable('../../');
         $passwordUsuario = md5($_POST['PasswordUsuario']);
         $perfilUsuario = $_POST['PerfilUsuario'];
 
-        $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
+        // $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
         if ($conn->connect_error) {
             die("Conexión fallida: " . $conn->connect_error);
         }

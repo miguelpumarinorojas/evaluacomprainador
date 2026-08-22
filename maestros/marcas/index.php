@@ -28,7 +28,7 @@ session_variable('../../');
         $codigoMarca = $_POST['CodigoMarca'];
         $descripcionMarca = $_POST['DescripcionMarca'];
         // Aquí puedes realizar la lógica para guardar la marca en la base de datos o realizar otras acciones necesarias.
-        $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
+        // $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
         if ($conn->connect_error) {
             die("Conexión fallida: " . $conn->connect_error);
         }

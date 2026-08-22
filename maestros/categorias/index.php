@@ -30,7 +30,7 @@ session_variable('../../');
         $codigoCategoria = $_POST['CodigoCategoria'];
         $descripcionCategoria = $_POST['DescripcionCategoria'];
         // Aquí puedes realizar la lógica para guardar la categoría en la base de datos o realizar otras acciones necesarias.
-        $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
+        // $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
         if ($conn->connect_error) {
             die("Conexión fallida: " . $conn->connect_error);
         }
