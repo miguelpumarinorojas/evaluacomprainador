@@ -146,13 +146,13 @@ session_variable('../../');
 
                                 </div>
                             </div>
-
+                        </div>
+                        <div class="card-footer text-end">
+                            <button type="submit" class="btn btn-success" name="btnRegistrar"><span class="material-icons align-bottom">save</span> Registrar</button>
                         </div>
                     </div>
             </div>
-            <div class="card-footer text-end">
-                <button type="submit" class="btn btn-success" name="btnRegistrar"><span class="material-icons align-bottom">save</span> Registrar</button>
-            </div>
+
         </div>
         </form>
         <div class="row pt-2">
