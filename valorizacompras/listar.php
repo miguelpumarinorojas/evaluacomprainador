@@ -2,6 +2,7 @@
 
 require('../complementos/FPDF/fpdf.php');
 include("../inc/funciones.php");
+include("../inc/connection.php");
 
 
 $mes_compra = '';
@@ -114,16 +115,16 @@ class PDF extends FPDF
    function ChapterBody()
    {
 
-      $servidor = "localhost";
-      $usuario = "root";
-      $clave = "";
-      $baseDeDatos = "evaluacomprainador";
+      // $servidor = "localhost";
+      // $usuario = "root";
+      // $clave = "";
+      // $baseDeDatos = "evaluacomprainador";
 
       // Conexión a la base de datos
-      $conexion = new mysqli($servidor, $usuario, $clave, $baseDeDatos);
-      if ($conexion->connect_error) {
-         die("Error de conexión: " . $conexion->connect_error);
-      }
+      // $conexion = new mysqli($servidor, $usuario, $clave, $baseDeDatos);
+      // if ($conexion->connect_error) {
+      //    die("Error de conexión: " . $conexion->connect_error);
+      // }
 
       // Consulta SQL
       $sql = "SELECT t1.id,
@@ -146,7 +147,7 @@ class PDF extends FPDF
         WHERE t1.estado = 0 and t1.fecha_cotizacion = '" . $this->mes_compra_query . "'
         ORDER BY t3.descripcion,t2.descripcion,  t5.descripcion";
 
-      $resultado = $conexion->query($sql);
+      $resultado = $conn->query($sql);
 
       $grupos = array();
       while ($row = $resultado->fetch_assoc()) {
