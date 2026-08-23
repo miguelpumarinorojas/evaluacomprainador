@@ -2,6 +2,7 @@
 
 require('../complementos/FPDF/fpdf.php');
 include("../inc/funciones.php");
+include("../inc/connection.php");
 
 
 $mes_compra = '';
@@ -78,13 +79,13 @@ class PDF extends FPDF
    //cuerpo
    function ChapterBody($mes_compra)
    {
-      $servidor = "localhost";
-      $usuario = "root";
-      $clave = "";
-      $baseDeDatos = "evaluacomprainador";
+      // $servidor = "localhost";
+      // $usuario = "root";
+      // $clave = "";
+      // $baseDeDatos = "evaluacomprainador";
 
-      $conexion = new mysqli($servidor, $usuario, $clave, $baseDeDatos);
-      if ($conexion->connect_error) {
+      // $conexion = new mysqli($servidor, $usuario, $clave, $baseDeDatos);
+      if ($conn->connect_error) {
          die("Error de conexión: " . $conexion->connect_error);
       }
 
