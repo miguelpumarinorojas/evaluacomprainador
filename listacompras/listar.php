@@ -4,7 +4,6 @@ require('../complementos/FPDF/fpdf.php');
 include("../inc/funciones.php");
 
 
-
 $mes_compra = '';
 if (isset($_GET['mes_compra'])) {
    $mes_compra = $_GET['mes_compra'];
@@ -17,6 +16,8 @@ class PDF extends FPDF
    public $mes_compra; // propiedad para guardar el mes
    public $mes_compra_query; // propiedad para guardar el mes para la consulta SQL
    public $fecha_impresion;
+   public $header;
+   public $colWidths;
 
    // Constructor extendido
    function __construct($orientation = 'P', $unit = 'mm', $size = 'A4', $mes_compra = '')
@@ -81,16 +82,16 @@ class PDF extends FPDF
    {
 
    include("../inc/connection.php");
-   
+
       // $servidor = "localhost";
       // $usuario = "root";
       // $clave = "";
       // $baseDeDatos = "evaluacomprainador";
 
       // $conexion = new mysqli($servidor, $usuario, $clave, $baseDeDatos);
-      if ($conn->connect_error) {
-         die("Error de conexión: " . $conn->connect_error);
-      }
+      // if ($conn->connect_error) {
+      //    die("Error de conexión: " . $conn->connect_error);
+      // }
 
       // Consulta SQL
       $query_1 = "SELECT * FROM lista_compras_mensual WHERE mes_compra = '$mes_compra'";
