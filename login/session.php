@@ -3,6 +3,12 @@
 session_start();
 
 function session_variable($carpeta){
+
+    if ($_SESSION['perfil'] == 3 && $carpeta == '') {
+        header('Location:'.$carpeta.'login/login.php');
+        exit;
+    }
+
     $inactive = 28800; // 8 horas
 
     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
