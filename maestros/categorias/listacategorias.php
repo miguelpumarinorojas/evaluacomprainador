@@ -2,8 +2,6 @@
 
 include("../../inc/connection.php");
 
-echo "que sucede?";
-
 ?>
 
 <table class="table table-striped table-hover table-bordered table-sm table-responsive">
