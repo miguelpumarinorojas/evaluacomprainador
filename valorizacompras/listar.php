@@ -115,6 +115,8 @@ class PDF extends FPDF
    function ChapterBody()
    {
 
+   include("../inc/connection.php");
+
       // $servidor = "localhost";
       // $usuario = "root";
       // $clave = "";
