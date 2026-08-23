@@ -162,7 +162,7 @@ session_variable('../../');
                         <span class="material-icons align-bottom">list</span> Lista de Categorias
                     </div>
                     <div class="card-body">
-                        <?php include("listaCategorias.php"); ?>
+                        <?php include("listacategorias.php"); ?>
                     </div>
                 </div>
             </div>
