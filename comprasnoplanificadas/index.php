@@ -280,15 +280,6 @@ session_variable('../');
         }
     </script>
     <script>
-        $('.datepicker').datepicker({
-            language: 'es',
-            format: 'dd-mm-yyyy',
-            autoclose: 'on',
-            todayHighlight: 'true',
-            orientation: 'auto'
-        });
-    </script>
-    <script>
         document.addEventListener('DOMContentLoaded', function() {
             inicializarCalculoPrecioFormularioPrincipal();
         });
