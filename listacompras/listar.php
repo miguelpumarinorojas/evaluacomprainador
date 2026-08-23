@@ -2,7 +2,7 @@
 
 require('../complementos/FPDF/fpdf.php');
 include("../inc/funciones.php");
-include("../inc/connection.php");
+
 
 
 $mes_compra = '';
@@ -79,6 +79,9 @@ class PDF extends FPDF
    //cuerpo
    function ChapterBody($mes_compra)
    {
+
+   include("../inc/connection.php");
+   
       // $servidor = "localhost";
       // $usuario = "root";
       // $clave = "";
@@ -86,12 +89,12 @@ class PDF extends FPDF
 
       // $conexion = new mysqli($servidor, $usuario, $clave, $baseDeDatos);
       if ($conn->connect_error) {
-         die("Error de conexión: " . $conexion->connect_error);
+         die("Error de conexión: " . $conn->connect_error);
       }
 
       // Consulta SQL
       $query_1 = "SELECT * FROM lista_compras_mensual WHERE mes_compra = '$mes_compra'";
-      $result_1 = $conexion->query($query_1);
+      $result_1 = $conn->query($query_1);
 
       if ($result_1->num_rows > 0) {
          $query = "SELECT 
@@ -116,7 +119,7 @@ class PDF extends FPDF
                     ORDER BY t3.descripcion, t1.descripcion";
       }
 
-      $resultado = $conexion->query($query);
+      $resultado = $conn->query($query);
       $this->AddPage();
 
       if ($resultado->num_rows == 0) {
