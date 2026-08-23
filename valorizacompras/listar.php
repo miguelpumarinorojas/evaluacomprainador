@@ -174,8 +174,8 @@ class PDF extends FPDF
    }
 }
 
-
 $pdf = new PDF('P','mm','A4',$mes_compra);
 $pdf->ChapterBody();
 $pdf->AliasNbPages('{total_pages}'); // muestra la pagina / y total de paginas
+ob_end_clean();
 $pdf->Output('ListadeCompras'.'_'.$mes_compra.'.pdf', 'D');//nombreDescarga, Visor(I->visualizar - D->descargar)
