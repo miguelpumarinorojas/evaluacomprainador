@@ -1,4 +1,4 @@
-    <?php
+<?php
 
     function formatoFechaDMY($fecha)
     {
@@ -47,5 +47,4 @@
 
         return (isset($meses[$mes]) ? $meses[$mes] : $fechaObj->format('m')) . '-' . $anio;
     }
-
-    ?>
+?>
