@@ -14,6 +14,7 @@ session_variable('../../');
     <title>Marcas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="apple-touch-icon" sizes="180x180" href="../../img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../../img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../../img/favicon-16x16.png">

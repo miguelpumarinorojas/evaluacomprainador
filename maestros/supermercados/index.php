@@ -14,6 +14,7 @@ session_variable('../../');
     <title>Supermercados</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="apple-touch-icon" sizes="180x180" href="../../img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../../img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../../img/favicon-16x16.png">
@@ -40,7 +41,7 @@ session_variable('../../');
         if ($resultado->num_rows > 0) {
             $validarCodigo->close();
             $conn->close();
-            ?>
+    ?>
             <div class='alert alert-danger notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
                 El supermercado <?php echo $codigoSupermercado; ?> ya se encuentra registrado! <span class="material-icons align-bottom">error</span>
             </div>
@@ -48,19 +49,20 @@ session_variable('../../');
             $validarCodigo->close();
 
 
-        $estadoSupermercado = 1; // Asignar un valor predeterminado para el estado del supermercado
-        $stmt = $conn->prepare("INSERT INTO supermercados (codigo, descripcion, estado) VALUES (?, ?, ?)");
-        $stmt->bind_param("ssi", $codigoSupermercado, $descripcionSupermercado, $estadoSupermercado);
-        $stmt->execute();
-        $stmt->close();
-        $conn->close();
+            $estadoSupermercado = 1; // Asignar un valor predeterminado para el estado del supermercado
+            $stmt = $conn->prepare("INSERT INTO supermercados (codigo, descripcion, estado) VALUES (?, ?, ?)");
+            $stmt->bind_param("ssi", $codigoSupermercado, $descripcionSupermercado, $estadoSupermercado);
+            $stmt->execute();
+            $stmt->close();
+            $conn->close();
 
 
-    ?>
-        <div class='alert alert-success notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
-            Supermercado <?php echo $codigoSupermercado." - ".$descripcionSupermercado; ?> registrado exitosamente! <span class="material-icons align-bottom">done</span>
-        </div>
-    <?php } }
+        ?>
+            <div class='alert alert-success notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
+                Supermercado <?php echo $codigoSupermercado . " - " . $descripcionSupermercado; ?> registrado exitosamente! <span class="material-icons align-bottom">done</span>
+            </div>
+    <?php }
+    }
 
 
 
