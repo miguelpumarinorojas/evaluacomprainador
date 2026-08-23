@@ -1,6 +1,6 @@
 <?php
 
-require('../complementos/FPDF/fpdf.php');
+require("../complementos/FPDF/fpdf.php");
 include("../inc/funciones.php");
 
 
@@ -56,17 +56,17 @@ class PDF extends FPDF
       $this->Cell(0, 5, 'Página ' . $this->PageNo() . '/{total_pages}', 0, 0, 'R');
    }
 
-   private function renderCabeceraTabla(array $header, array $colWidths)
-   {
-      $this->SetFont('Arial', 'B', 9);
-      $this->SetFillColor(200, 200, 200);
+   // private function renderCabeceraTabla(array $header, array $colWidths)
+   // {
+   //    $this->SetFont('Arial', 'B', 9);
+   //    $this->SetFillColor(200, 200, 200);
 
-      foreach ($header as $i => $col) {
-         $this->Cell($colWidths[$i], 10, utf8_decode($col), 1, 0, 'C', true);
-      }
+   //    foreach ($header as $i => $col) {
+   //       $this->Cell($colWidths[$i], 10, utf8_decode($col), 1, 0, 'C', true);
+   //    }
 
-      $this->Ln();
-   }
+   //    $this->Ln();
+   // }
 
    private function renderFilaTabla(array $values)
    {
