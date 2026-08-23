@@ -28,7 +28,7 @@ include("../../inc/connection.php");
                     <td><?php echo $numero++; ?></td>
                     <td><?php echo $row['email']; ?></td>
                     <td><?php echo $row['nombre']; ?></td>
-                    <td><?php echo $row['perfil'] == 1 ? 'Administrador' : 'Usuario'; ?></td>
+                    <td><?php echo $row['perfil'] == 1 ? 'Administrador' : ($row['perfil'] == 2 ? 'Usuario' : 'Seleccionar compra mensual'); ?></td>
                     <td><?php echo $row['fecha_creacion']; ?></td>
                     <td><?php echo $row['estado'] == 1 ? 'Activo' : 'Inactivo'; ?></td>
                     <td>

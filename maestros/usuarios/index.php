@@ -77,7 +77,7 @@ session_variable('../../');
             <div>
                 <span class="navbar-brand mb-0 h1"><span class="material-icons align-bottom">shopping_cart</span> EvaluaCompraInador</span>
                 <br>
-                <span class="navbar-text">Bienvenido: <?php echo $_SESSION['nombre'] ?> - Perfil: <?php echo $_SESSION['perfil'] == 1 ? 'Administrador' : 'Usuario'; ?></span>
+                <span class="navbar-text">Bienvenido: <?php echo $_SESSION['nombre'] ?> - Perfil: <?php echo $_SESSION['perfil'] == 1 ? 'Administrador' : ($_SESSION['perfil'] == 2 ? 'Usuario' : 'Seleccionar compra mensual'); ?></span>
             </div>
             <div class="badge align-bottom">
                 <a href='../../login/logout.php' class="text-white text-decoration-none">
@@ -130,6 +130,7 @@ session_variable('../../');
                                             <option value="">Seleccione un perfil</option>
                                             <option value="1">Administrador</option>
                                             <option value="2">Usuario</option>
+                                            <option value="3">Seleccionar compra mensual</option>
                                         </select>
                                         <div class="invalid-feedback">
                                             Seleccione el perfil del usuario.

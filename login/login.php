@@ -2,6 +2,8 @@
 session_start();
 include("../inc/connection.php");
 
+$mes_compra = date('Y-m');
+
 $status = isset($_GET['status']) ? $_GET['status'] : '';
 
 $invalidPassword = false;
@@ -38,8 +40,12 @@ if (isset($_POST['BTN_LOGIN'])) {
             $_SESSION['perfil'] = $user['perfil'];
             $_SESSION['timeout'] = time();
 
+          if($_SESSION['perfil'] == 3){
             // 🚨 Importante: redirigir ANTES de enviar HTML
+            header("Location: ../listacompras/index.php?mes_compra=$mes_compra");
+          } else {
             header("Location: ../index.php");
+          }
             exit;
         } else {
             $invalidPassword = true;

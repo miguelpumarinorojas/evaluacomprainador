@@ -3,6 +3,8 @@ require_once('../inc/connection.php');
 include('../login/session.php');
 session_variable('../');
 
+$mes_compra = $_GET['mes_compra'] ?? '';
+
 ?>
 
 <!doctype html>
@@ -122,7 +124,7 @@ session_variable('../');
             <div>
                 <span class="navbar-brand mb-0 h1"><span class="material-icons align-bottom">shopping_cart</span> EvaluaCompraInador</span>
                 <br>
-                <span class="navbar-text">Bienvenido: <?php echo $_SESSION['nombre'] ?> - Perfil: <?php echo $_SESSION['perfil'] == 1 ? 'Administrador' : 'Usuario'; ?></span>
+                <span class="navbar-text">Bienvenido: <?php echo $_SESSION['nombre'] ?> - Perfil: <?php echo $_SESSION['perfil'] == 1 ? 'Administrador' : ($_SESSION['perfil'] == 2 ? 'Usuario' : 'Seleccionar compra mensual'); ?></span>
             </div>
             <div class="badge align-bottom">
                 <a href='../login/logout.php' class="text-white text-decoration-none">
@@ -136,9 +138,13 @@ session_variable('../');
     <nav aria-label="breadcrumb" class="bg-light py-2 px-3">
         <ol class="breadcrumb">
             <li class="breadcrumb-item active" aria-current="page">
-                <a href="../" class="text-decoration-none text-dark">
+                <?php if ($_SESSION['perfil'] == 3) { ?>
                     <span class="material-icons align-bottom">home</span> Inicio
-                </a>
+                <?php } else { ?>
+                    <a href="../" class="text-decoration-none text-dark">
+                        <span class="material-icons align-bottom">home</span> Inicio
+                    </a>
+                <?php } ?>
             </li>
             <li class="breadcrumb-item active" aria-current="page"><span class="material-icons align-bottom">add_shopping_cart</span> Listas de compras mensual</li>
         </ol>
@@ -157,7 +163,7 @@ session_variable('../');
                                     <div class="mb-3">
                                         <!-- <label for="fechaCotizacion" class="form-label"><span class="material-icons align-bottom">calendar_today</span> Fecha lista de compras</label> -->
                                         <input type="month" class="form-control" id="fechaCotizacion" name="fechaCotizacion"
-                                            value="<?php echo $mes_compra; ?>" required autofocus>
+                                            value="<?php echo $mes_compra; ?>" required autofocus <?php if ($_SESSION['perfil'] == 3) echo 'disabled'; ?>>
                                         <div class="invalid-feedback">
                                             Seleccione una fecha.
                                         </div>
