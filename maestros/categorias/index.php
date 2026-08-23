@@ -155,21 +155,18 @@ session_variable('../../');
             </div>
         </div>
         </form>
-    </div>
-    </div>
-    <div class="row pt-2">
-        <div class="col">
-            <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    <span class="material-icons align-bottom">list</span> Lista de Categorias
-                </div>
-                <div class="card-body">
-                    <?php include("listaCategorias.php"); ?>
+        <div class="row pt-2">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <span class="material-icons align-bottom">list</span> Lista de Categorias
+                    </div>
+                    <div class="card-body">
+                        <?php include("listaCategorias.php"); ?>
+                    </div>
                 </div>
             </div>
         </div>
-
-    </div>
     </div>
     <script>
         // Example starter JavaScript for disabling form submissions if there are invalid fields
