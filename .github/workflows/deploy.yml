@@ -16,6 +16,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /home2/miguelpu/repositories/evaluacomprainador
+            cd /home2/miguelpu/repositorio/evaluacomprainador
             git pull origin main
             cp -R * /home2/miguelpu/public_html/
