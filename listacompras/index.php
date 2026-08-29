@@ -147,8 +147,84 @@ $mes_compra = $_GET['mes_compra'] ?? '';
                 <?php } ?>
             </li>
             <li class="breadcrumb-item active" aria-current="page"><span class="material-icons align-bottom">add_shopping_cart</span> Listas de compras mensual</li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <?php if ($_SESSION['perfil'] == 3) { ?>
+                    <span class="material-symbols-outlined align-bottom">add</span> Agregar Producto
+                <?php } else { ?>
+                    <a href="#AgregarProductoModal" data-bs-toggle="modal" class="text-decoration-none text-dark">
+                        <span class="material-symbols-outlined align-bottom">add</span> Agregar Producto
+                    </a>
+                <?php } ?>
+            </li>
         </ol>
     </nav>
+    <!-- Modal -->
+    <form action="registrar_material.php" method="POST" class="needs-validation" autocomplete="off" enctype="multipart/form-data" novalidate>
+        <div class="modal fade" id="AgregarProductoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="AgregarProductoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+
+                        <h1 class="modal-title fs-5" id="AgregarProductoModalLabel">
+                            <span class="material-symbols-outlined align-bottom">add</span>
+                            Agregar Producto
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row pt-2">
+                            <div class="col">
+                                <label for="NombreProducto">
+                                    <span class="material-symbols-outlined align-bottom">label</span> Descripcion del Producto
+                                </label>
+                                <input type="text" class="form-control" id="NombreProducto" name="NombreProducto" placeholder="Ingrese el nombre del Producto" required>
+                                <div class="invalid-feedback">
+                                    Ingrese la descripción del producto.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row pt-2">
+                            <div class="col">
+                                <label for="CategoriaProducto">
+                                    <span class="material-symbols-outlined align-bottom">list</span> Categoría del Producto
+                                </label>
+                                <select class="form-select" id="CategoriaProducto" name="CategoriaProducto" required>
+                                    <option value="">Seleccione una categoría</option>
+                                    <?php
+                                    include("../../inc/connection.php");
+
+                                    $query_select = "SELECT * FROM categorias WHERE estado = 1 ORDER BY descripcion";
+                                    $result_select = $conn->query($query_select);
+
+                                    if ($result_select->num_rows > 0) {
+                                        while ($row = $result_select->fetch_assoc()) { ?>
+                                            <option value="<?php echo $row['id']; ?>"><?php echo $row['descripcion']; ?></option>
+                                        <?php }
+                                    } else { ?>
+                                        <option value="">No se encontraron categorías</option>
+                                    <?php }
+                                    $conn->close();
+                                    ?>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Ingrese la categoría del Producto.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <span class="material-symbols-outlined align-bottom">close</span> Cerrar
+                        </button>
+                        <button type="submit" class="btn btn-success" id="btnRegistrarMaterial">
+                            <span class="material-symbols-outlined align-bottom">save</span> Registrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
     <div class="container-fluid">
         <form action="" method="POST" class="needs-validation" autocomplete="off" enctype="multipart/form-data" novalidate>
             <div class="row pt-2">
@@ -173,7 +249,9 @@ $mes_compra = $_GET['mes_compra'] ?? '';
                         </div>
                         <div class="card-footer text-end">
                             <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-outline-success" name="btnRegistrar" <?php if($mes_compra == '' && $_SESSION['perfil'] == 3) { echo 'disabled'; } ?>><span class="material-icons align-bottom">add_shopping_cart</span> Generar Lista de compras mensual</button>
+                                <button type="submit" class="btn btn-outline-success" name="btnRegistrar" <?php if ($mes_compra == '' && $_SESSION['perfil'] == 3) {
+                                                                                                                echo 'disabled';
+                                                                                                            } ?>><span class="material-icons align-bottom">add_shopping_cart</span> Generar Lista de compras mensual</button>
                             </div>
                         </div>
                     </div>
@@ -187,8 +265,6 @@ $mes_compra = $_GET['mes_compra'] ?? '';
                         </div>
                         <div class="card-body">
                             <div id="TABLA_DE_COMPRAS"></div>
-                            <?php //include("listasDeComprasGeneradas.php"); 
-                            ?>
                         </div>
                     </div>
                 </div>
