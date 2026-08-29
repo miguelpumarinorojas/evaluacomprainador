@@ -173,7 +173,7 @@ $mes_compra = $_GET['mes_compra'] ?? '';
                         </div>
                         <div class="card-footer text-end">
                             <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-outline-success" name="btnRegistrar" <?php if($mes_compra == '') { echo 'disabled'; } ?>><span class="material-icons align-bottom">add_shopping_cart</span> Generar Lista de compras mensual</button>
+                                <button type="submit" class="btn btn-outline-success" name="btnRegistrar" <?php if($mes_compra == '' && $_SESSION['perfil'] == 3) { echo 'disabled'; } ?>><span class="material-icons align-bottom">add_shopping_cart</span> Generar Lista de compras mensual</button>
                             </div>
                         </div>
                     </div>

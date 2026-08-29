@@ -9,7 +9,7 @@ include("../../inc/connection.php");
     <thead class="table-dark sticky-top">
         <tr>
             <th width="50">N°</th>
-            <th width="200">Codigo</th>
+            <!-- <th width="200">Codigo</th> -->
             <th>Descripción</th>
             <th>Categoria</th>
             <th width="50">Acciones</th>
@@ -29,7 +29,7 @@ include("../../inc/connection.php");
             while ($row = $result->fetch_assoc()) { ?>
                 <tr>
                     <td><?php echo $numero++; ?></td>
-                    <td><?php echo $row['codigo']; ?></td>
+                    <!-- <td><?php //echo $row['codigo']; ?></td> -->
                     <td><?php echo $row['descripcion']; ?></td>
                     <td><span class="material-symbols-outlined align-bottom"><?php echo $row['icono_categoria']; ?></span> <?php echo $row['descripcion_categoria']; ?></td>
                     <td style="display: flex; gap: 15px;">
@@ -48,10 +48,10 @@ include("../../inc/connection.php");
                                         </div>
                                         <div class="modal-body">
                                             <div class="row pt-2">
-                                                <div class="col">
+                                                <!-- <div class="col">
                                                     <label for="CodigoProducto" class="form-label"><span class="material-icons align-bottom">label</span> Codigo del Producto</label>
-                                                    <input type="text" class="form-control" id="CodigoProducto" value="<?php echo $row['codigo']; ?>" name="CodigoProducto" maxlength="20" disabled required>
-                                                </div>
+                                                    <input type="text" class="form-control" id="CodigoProducto" value="<?php //echo $row['codigo']; ?>" name="CodigoProducto" maxlength="20" disabled required>
+                                                </div> -->
                                             </div>
                                             <div class="row pt-2">
                                                 <div class="col">

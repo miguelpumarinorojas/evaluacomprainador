@@ -26,7 +26,7 @@ session_variable('../../');
     <?php
 
     if (isset($_POST['btnRegistrar']) && !empty($_POST['CodigoProducto']) && !empty($_POST['DescripcionProducto'])) {
-        $codigoProducto = $_POST['CodigoProducto'];
+        $codigoProducto = '0';
         $descripcionProducto = $_POST['DescripcionProducto'];
         $categoriaProducto = $_POST['CategoriaProducto'];
         // Aquí puedes realizar la lógica para guardar el producto en la base de datos o realizar otras acciones necesarias. 
@@ -112,7 +112,7 @@ session_variable('../../');
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-3">
+                                <!-- <div class="col-md-3">
                                     <div class="mb-3">
                                         <label for="CodigoProducto" class="form-label"><span class="material-icons align-bottom">label</span> Codigo del Producto</label>
                                         <input type="text" class="form-control" id="CodigoProducto" name="CodigoProducto" placeholder="Codigo del Producto" maxlength="20" required autofocus>
@@ -121,8 +121,8 @@ session_variable('../../');
                                         </div>
                                     </div>
 
-                                </div>
-                                <div class="col-md-6">
+                                </div> -->
+                                <div class="col-md-6 col-sm-6 col-xs-12">
                                     <div class="mb-3">
                                         <label for="DescripcionProducto" class="form-label"><span class="material-icons align-bottom">text_fields</span> Descripción del Producto</label>
                                         <input type="text" class="form-control" id="DescripcionProducto" name="DescripcionProducto" placeholder="Descripción del Producto" maxlength="200" required>
@@ -132,7 +132,7 @@ session_variable('../../');
                                     </div>
 
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
                                     <div class="mb-3">
                                         <label for="CategoriaProducto" class="form-label"><span class="material-icons align-bottom">list</span> Categoria</label>
                                         <select name="CategoriaProducto" id="CategoriaProducto" class="form-select" required>
@@ -175,7 +175,7 @@ session_variable('../../');
                     <div class="card-header bg-secondary text-white">
                         <span class="material-icons align-bottom">list</span> Lista de Productos
                     </div>
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                         <?php include("listaProductos.php"); ?>
                     </div>
                 </div>

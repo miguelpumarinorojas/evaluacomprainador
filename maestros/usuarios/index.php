@@ -105,7 +105,7 @@ session_variable('../../');
     </nav>
     <div class="container-fluid">
         <div class="row pt-2">
-            <div class="col">
+            <div class="col-md-4 col-sm-6 col-xs-12">
                 <form action="" method="POST" class="needs-validation" autocomplete="off" enctype="multipart/form-data" novalidate>
                     <div class="card">
                         <div class="card-header bg-secondary text-white">
@@ -113,7 +113,7 @@ session_variable('../../');
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
                                     <div class="mb-3">
                                         <label for="CodigoUnidad" class="form-label"><span class="material-icons align-bottom">text_fields</span> Nombre usuario</label>
                                         <input type="text" class="form-control" id="NombreUsuario" name="NombreUsuario" placeholder="Nombre de usuario" maxlength="20" required>
@@ -123,7 +123,7 @@ session_variable('../../');
                                     </div>
 
                                 </div>
-                                <div class="col">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
                                     <div class="mb-3">
                                         <label for="CodigoUnidad" class="form-label"><span class="material-symbols-outlined align-bottom">admin_panel_settings</span> Perfil usuario</label>
                                         <select class="form-control" id="PerfilUsuario" name="PerfilUsuario" required>
@@ -138,7 +138,7 @@ session_variable('../../');
                                     </div>
 
                                 </div>
-                                <div class="col">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
                                     <div class="mb-3">
                                         <label for="DescripcionUnidad" class="form-label"><span class="material-icons align-bottom">alternate_email</span> Email</label>
                                         <input type="text" class="form-control" id="EmailUsuario" name="EmailUsuario" placeholder="Email" maxlength="200" required>
@@ -148,7 +148,7 @@ session_variable('../../');
                                     </div>
 
                                 </div>
-                                <div class="col">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
                                     <div class="mb-3">
                                         <label for="DescripcionUnidad" class="form-label"><span class="material-icons align-bottom">password</span> Contraseña</label>
                                         <input type="password" class="form-control" id="PasswordUsuario" name="PasswordUsuario" placeholder="maximo 10 caracteres" maxlength="10" required>
@@ -161,7 +161,9 @@ session_variable('../../');
                             </div>
                         </div>
                         <div class="card-footer text-end">
-                            <button type="submit" class="btn btn-success" name="btnRegistrar"><span class="material-icons align-bottom">save</span> Registrar</button>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success" name="btnRegistrar"><span class="material-icons align-bottom">save</span> Registrar</button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -173,7 +175,7 @@ session_variable('../../');
                     <div class="card-header bg-secondary text-white">
                         <span class="material-icons align-bottom">list</span> Lista de usuarios
                     </div>
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                         <?php include("listausuarios.php"); ?>
                     </div>
                 </div>
