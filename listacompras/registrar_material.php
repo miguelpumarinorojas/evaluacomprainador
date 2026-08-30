@@ -1,5 +1,5 @@
 <?php
-    include("../../inc/connection.php");
+    include("../inc/connection.php");
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $CodigoProducto = '0';
         $NombreProducto = $_POST['NombreProducto'];
