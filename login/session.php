@@ -4,7 +4,7 @@ session_start();
 
 function session_variable($carpeta){
 
-    if ($_SESSION['perfil'] == 3 && $carpeta == '') {
+    if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 3 && $carpeta == '') {
         header('Location:'.$carpeta.'login/login.php');
         exit;
     }

@@ -6,10 +6,8 @@ session_variable('../');
 $mes_compra = $_GET['mes_compra'] ?? '';
 
 ?>
-
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
