@@ -191,7 +191,7 @@ $mes_compra = $_GET['mes_compra'] ?? '';
                                 <select class="form-select" id="CategoriaProducto" name="CategoriaProducto" required>
                                     <option value="">Seleccione una categoría</option>
                                     <?php
-                                    include("../../inc/connection.php");
+                                    include("../inc/connection.php");
 
                                     $query_select = "SELECT * FROM categorias WHERE estado = 1 ORDER BY descripcion";
                                     $result_select = $conn->query($query_select);
