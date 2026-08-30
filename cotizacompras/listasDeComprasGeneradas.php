@@ -43,7 +43,7 @@ $fecha_cotizacion = $_POST['FECHA_COTIZACION'];
                 <tr>
                     <td class="text-center">
                         <a href="../cotizador/index.php?mes_compra=<?php echo urlencode($row_ppal['mes_compra']); ?>&supermercado=<?php echo urlencode($row_ppal['id_supermercado']); ?>" class="text-success" title="Ingresar cotizaciones en lista">
-                            <img href="../cotizador/index.php?mes_compra=<?php echo urlencode($row_ppal['mes_compra']); ?>&supermercado=<?php echo urlencode($row_ppal['id_supermercado']); ?>" src="../maestros/supermercados/<?php echo $row_ppal['logo']; ?>" height="50" alt="Logo del supermercado">
+                            <img href="../cotizador/index.php?mes_compra=<?php echo urlencode($row_ppal['mes_compra']); ?>&supermercado=<?php echo urlencode($row_ppal['id_supermercado']); ?>" src="../maestros/supermercados/<?php echo $row_ppal['logo']; ?>" height="50" alt="<?php echo $row_ppal['descripcion_supermercado']; ?>">
                         </a>
                     </td>
                     <!-- <td><?php // echo formatoFechaHoraDMY($row_ppal['fecha_creacion']); ?></td> -->
