@@ -181,7 +181,7 @@ session_variable('../');
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                         <?php include("listaCompras.php"); ?>
                     </div>
                 </div>
