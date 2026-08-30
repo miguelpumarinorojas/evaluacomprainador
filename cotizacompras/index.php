@@ -128,7 +128,7 @@ session_variable('../');
         $supermercadoPersist = $supermercados;
 
         // Aquí puedes realizar la lógica para guardar el producto en la base de datos o realizar otras acciones necesarias. 
-        $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
+        // $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
         if ($conn->connect_error) {
             die("Conexión fallida: " . $conn->connect_error);
         }
