@@ -19,7 +19,13 @@ if (!preg_match('/^\d{4}-\d{2}$/', $mes_compra)) {
 }
 
 // ==== Conexión ====
-// $mysqli = new mysqli($db_host, $db_user, $db_pass, $db_name);
+// ==== Ruta base donde viven los logos de los supermercados ====
+// Los logos están en public_html/maestros/supermercados/, y la columna 'logo'
+// en la BD guarda algo como 'logos/tottus.png' relativo a esa carpeta.
+// El reporte vive en public_html/valorizacompras/, así que se arma una ruta
+// absoluta (desde la raíz del sitio) para que cargue sin importar desde dónde se acceda.
+$base_url_logos = '/maestros/supermercados/';
+
 
 if ($conn->connect_errno) {
     die('Error de conexión: ' . $conn->connect_error);
@@ -129,7 +135,8 @@ $conn->close();
                         <?php
                         $mejor = parsear_mejor_precio($row['Mejor_Precio'] ?? null);
                         if (!empty($row['Mejor_Precio_Logo'])) {
-                            echo '<img src="../maestros/supermercados/' . htmlspecialchars($row['Mejor_Precio_Logo']) . '" alt="' . htmlspecialchars($mejor['supermercado']) .'" height="50">';
+                            // echo '<img src="../maestros/supermercados/' . htmlspecialchars($row['Mejor_Precio_Logo']) . '" alt="' . htmlspecialchars($mejor['supermercado']) . '" height="50">';
+                            echo '<img src="' . $base_url_logos . htmlspecialchars($row['Mejor_Precio_Logo']) . '" alt="' . htmlspecialchars($mejor['supermercado']) . '" height="50">';
                         }
                         if ($mejor === null) {
                             echo '<span class="sin-precio">—</span>';
