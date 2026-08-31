@@ -170,7 +170,8 @@ session_variable('../');
                     <div class="card-body table-responsive">
                         <div id="TABLA_DE_COMPRAS">
                         </div>
-                        <?php //include("listaComprasSupermercado.php"); ?>
+                        <?php //include("listaComprasSupermercado.php"); 
+                        ?>
                     </div>
                 </div>
             </div>
@@ -205,7 +206,7 @@ session_variable('../');
         $(document).ready(function() {
             CARGALISTADECOMPRAS();
             $('#mes_anio').on('change', function() {
-            console.log('Fecha de cotización cambiada a: ' + $(this).val());
+                console.log('Fecha de cotización cambiada a: ' + $(this).val());
                 CARGALISTADECOMPRAS();
             });
         });
@@ -214,8 +215,8 @@ session_variable('../');
             $('#TABLA_DE_COMPRAS').html('<div class="d-flex justify-content-center"><div class="spinner-border text-primary" style="width: 4rem; height: 4rem;" role="status"><span class="visually-hidden">Loading...</span></div></div>');
             $.ajax({
                 type: "POST",
-                url: "listaComprasSupermercado.php",
-                data: "FECHA_COTIZACION=" + $('#mes_anio').val(),
+                url: "reporte_precios_super.php",
+                data: "mes=" + $('#mes_anio').val(),
                 success: function(r) {
                     $('#TABLA_DE_COMPRAS').html(r);
                 }
