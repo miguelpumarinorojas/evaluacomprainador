@@ -129,7 +129,7 @@ $conn->close();
                         <?php
                         $mejor = parsear_mejor_precio($row['Mejor_Precio'] ?? null);
                         if (!empty($row['Mejor_Precio_Logo'])) {
-                            echo '<img src="../maestros/supermercados/' . htmlspecialchars($row['Mejor_Precio_Logo']) . '" alt="Logo supermercado" height="50">';
+                            echo '<img src="../maestros/supermercados/' . htmlspecialchars($row['Mejor_Precio_Logo']) . '" alt="' . htmlspecialchars($mejor['supermercado']) .'" height="50">';
                         }
                         if ($mejor === null) {
                             echo '<span class="sin-precio">—</span>';
