@@ -146,7 +146,7 @@ $conn->close();
                             // echo '<div class="supermercado">' . htmlspecialchars($mejor['supermercado']) . '</div>';
                             echo '<div class="marca">' . htmlspecialchars($mejor['marca']) . '</div>';
                             echo '<div class="precio-valor">$' . number_format($mejor['precio'], 0, ',', '.') . '</div>';
-                            echo '<div class="precio-um">($' . number_format($mejor['precio_por_um'], 0, ',', '.') . ' /' . htmlspecialchars($mejor['unidad']) . ')</div>';
+                            echo '<div class="precio-um">($' . number_format($mejor['precio_por_um'], 0, ',', '.') . '/' . htmlspecialchars($mejor['unidad']) . ')</div>';
                         }
                         ?>
                     </td>
@@ -161,8 +161,8 @@ $conn->close();
                                 echo htmlspecialchars($datos['raw']);
                             } else {
                                 echo '<div class="marca">' . htmlspecialchars($datos['marca']) . '</div>';
-                                echo '<div class="precio-valor">$' . number_format($datos['precio'], 0, ',', '.') . '</div>';
-                                echo '<div class="precio-um">($' . number_format($datos['precio_por_um'], 0, ',', '.') . ' /' . htmlspecialchars($datos['unidad']) . ')</div>';
+                                echo '<div class="precio-valor">$' . number_format($datos['precio'], 0, ',', '.') . '</div><br>';
+                                echo '<div class="precio-um">($' . number_format($datos['precio_por_um'], 0, ',', '.') . '/' . htmlspecialchars($datos['unidad']) . ')</div>';
                             }
                             ?>
                         </td>
