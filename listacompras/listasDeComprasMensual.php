@@ -57,7 +57,7 @@ $fecha_cotizacion = $_POST['FECHA_COTIZACION'];
                         LEFT JOIN lista_compras_mensual l 
                             ON p.id = l.producto 
                             AND l.mes_compra = '$fecha_cotizacion'
-                        LEFT JOIN (SELECT producto, AVG(cantidad_compra) AS promedio_historico 
+                        LEFT JOIN (SELECT producto, round(AVG(cantidad_compra)) AS promedio_historico 
                             FROM lista_compras
                             GROUP BY producto) AS compra_promedio ON p.id = compra_promedio.producto
                         LEFT JOIN (SELECT producto, cantidad_compra
@@ -77,7 +77,7 @@ $fecha_cotizacion = $_POST['FECHA_COTIZACION'];
                             IFNULL(ultima_compra.cantidad_compra, '') AS ultima_cantidad
                         FROM productos t1 
                         INNER JOIN categorias t3 on t1.categoria = t3.id
-                        LEFT JOIN (SELECT producto, AVG(cantidad_compra) AS promedio_historico 
+                        LEFT JOIN (SELECT producto, round(AVG(cantidad_compra)) AS promedio_historico 
                             FROM lista_compras
                             GROUP BY producto) AS compra_promedio ON t1.id = compra_promedio.producto
                         LEFT JOIN (SELECT producto, cantidad_compra
