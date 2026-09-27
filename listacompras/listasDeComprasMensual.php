@@ -24,6 +24,8 @@ $fecha_cotizacion = $_POST['FECHA_COTIZACION'];
             <th width="5">N°</th>
             <th>Producto</th>
             <th>Cat</th>
+            <th width="5">Promedio Mensual</th>
+            <th width="5">Cant. Ult. Compra</th>
             <th>Cantidad</th>
             <!-- <th><input type="checkbox" name="seleccionar-todos[]" id="seleccionar-todos"></th> -->
         </tr>
@@ -32,20 +34,22 @@ $fecha_cotizacion = $_POST['FECHA_COTIZACION'];
         <?php
 
         if (empty($fecha_cotizacion)) { ?>
-           <tr>
-                <td colspan="4">Seleccione una fecha para mostrar los productos.</td>
+            <tr>
+                <td colspan="6">Seleccione una fecha para mostrar los productos.</td>
             </tr>
-       <?php } else {
+            <?php } else {
 
-        $query_1 = "SELECT * FROM lista_compras_mensual WHERE mes_compra = '$fecha_cotizacion'";
-        $result_1 = $conn->query($query_1);
-        if ($result_1->num_rows > 0) {
+            $query_1 = "SELECT * FROM lista_compras_mensual WHERE mes_compra = '$fecha_cotizacion'";
+            $result_1 = $conn->query($query_1);
+            if ($result_1->num_rows > 0) {
 
-            $query = "SELECT 
+                $query = "SELECT 
                             p.id,
                             p.descripcion,
                             c.icono,
                             c.descripcion AS descripcion_categoria,
+                            IFNULL(compra_promedio.promedio_historico, '') AS promedio_historico,
+                            IFNULL(ultima_compra.cantidad_compra, '') AS ultima_cantidad,
                             IFNULL(l.cantidad, '') AS cantidad,
                             IFNULL(l.estado, '') AS estado
                         FROM productos p
@@ -53,39 +57,64 @@ $fecha_cotizacion = $_POST['FECHA_COTIZACION'];
                         LEFT JOIN lista_compras_mensual l 
                             ON p.id = l.producto 
                             AND l.mes_compra = '$fecha_cotizacion'
+                        LEFT JOIN (SELECT producto, AVG(cantidad_compra) AS promedio_historico 
+                            FROM lista_compras
+                            GROUP BY producto) AS compra_promedio ON p.id = compra_promedio.producto
+                        LEFT JOIN (SELECT producto, cantidad_compra
+                                FROM lista_compras
+                                WHERE fecha_cotizacion = (SELECT MAX(fecha_cotizacion) FROM lista_compras)) AS ultima_compra ON p.id = ultima_compra.producto
                         WHERE p.estado = 1
                         ORDER BY c.descripcion, p.descripcion;";
-
-        } else {
-            $query = "SELECT DISTINCT t1.id, t1.descripcion,t3.icono,t3.descripcion as descripcion_categoria, '' as cantidad, '' as estado
+            } else {
+                $query = "SELECT DISTINCT 
+                            t1.id, 
+                            t1.descripcion,
+                            t3.icono,
+                            t3.descripcion as descripcion_categoria, 
+                            '' as cantidad, 
+                            '' as estado,
+                            IFNULL(compra_promedio.promedio_historico, '') AS promedio_historico,
+                            IFNULL(ultima_compra.cantidad_compra, '') AS ultima_cantidad
                         FROM productos t1 
                         INNER JOIN categorias t3 on t1.categoria = t3.id
+                        LEFT JOIN (SELECT producto, AVG(cantidad_compra) AS promedio_historico 
+                            FROM lista_compras
+                            GROUP BY producto) AS compra_promedio ON t1.id = compra_promedio.producto
+                        LEFT JOIN (SELECT producto, cantidad_compra
+                                FROM lista_compras
+                                WHERE fecha_cotizacion = (SELECT MAX(fecha_cotizacion) FROM lista_compras)) AS ultima_compra ON t1.id = ultima_compra.producto
                         WHERE t1.estado = 1
                         ORDER BY t3.descripcion, t1.descripcion";
-        }
+            }
 
-        $result = $conn->query($query);
-        if ($result->num_rows > 0) {
-            $numero = 1;
-            while ($row_ppal = $result->fetch_assoc()) {
-                $filasGeneradas[] = $numero;
-        ?>
+            $result = $conn->query($query);
+            if ($result->num_rows > 0) {
+                $numero = 1;
+                while ($row_ppal = $result->fetch_assoc()) {
+                    $filasGeneradas[] = $numero;
+            ?>
+                    <tr>
+                        <td class="text-center"><?php echo $numero++; ?></td>
+                        <td><?php echo $row_ppal['descripcion']; ?></td>
+                        <td><span class="material-symbols-outlined"><?php echo $row_ppal['icono']; ?></span></td>
+                        <td><?php echo $row_ppal['promedio_historico']; ?></td>
+                        <td><?php echo $row_ppal['ultima_cantidad']; ?></td>
+                        <td>
+                            <input type="number" class="form-control" name="cantidades[]" value="<?php echo $row_ppal['cantidad']; ?>" min="0">
+                            <input type="hidden" name="productos[]" value="<?php echo $row_ppal['id']; ?>">
+                        </td>
+                        <!-- <td><input type="checkbox" name="seleccionados[]" id="seleccionado-<?php //echo $row_ppal['id']; 
+                                                                                                ?>" value="<?php //echo $row_ppal['id']; 
+                                                                                                            ?>" <?php //echo ($row_ppal['estado'] == 1) ? 'checked' : ''; 
+                                                                                                                ?>></td> -->
+                    </tr>
+                <?php }
+            } else { ?>
                 <tr>
-                    <td class="text-center"><?php echo $numero++; ?></td>
-                    <td><?php echo $row_ppal['descripcion']; ?></td>
-                    <td><span class="material-symbols-outlined"><?php echo $row_ppal['icono']; ?></span></td>
-                    <td>
-                        <input type="number" class="form-control"  name="cantidades[]" value="<?php echo $row_ppal['cantidad']; ?>" min="0">
-                        <input type="hidden" name="productos[]" value="<?php echo $row_ppal['id']; ?>">
-                    </td>
-                    <!-- <td><input type="checkbox" name="seleccionados[]" id="seleccionado-<?php //echo $row_ppal['id']; ?>" value="<?php //echo $row_ppal['id']; ?>" <?php //echo ($row_ppal['estado'] == 1) ? 'checked' : ''; ?>></td> -->
+                    <td colspan="6">No se encontraron listas generadas.</td>
                 </tr>
-            <?php }
-        } else { ?>
-            <tr>
-                <td colspan="4">No se encontraron listas generadas.</td>
-            </tr>
-        <?php }         }
+        <?php }
+        }
         $conn->close();
         ?>
     </tbody>
