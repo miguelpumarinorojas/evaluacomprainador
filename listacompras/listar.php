@@ -28,8 +28,8 @@ class PDF extends FPDF
       $this->fecha_impresion = date('d/m/Y H:i');
 
       // Definir cabecera y anchos de columnas
-      $this->header = array('N°', 'Producto', 'Prom. Hist.', 'Últ. Compra', 'Categoría', 'Cantidad');
-      $this->colWidths = array(10, 100, 20, 20, 25, 20);
+      $this->header = array('N°', 'Producto', 'Prom. Hist.', 'Últ. Compra', 'Stock', 'Categoría', 'Cantidad');
+      $this->colWidths = array(10, 60, 20, 20, 15, 30, 30);
    }
 
    // Cabecera de página
@@ -53,7 +53,7 @@ class PDF extends FPDF
       $this->SetY(-12);
       $this->SetFont('Arial', 'I', 8);
       $this->Cell(0, 5, 'Impreso el ' . $this->fecha_impresion, 0, 0, 'L');
-      $this->Cell(0, 5, 'Página ' . $this->PageNo() . '/{total_pages}', 0, 0, 'R');
+      $this->Cell(0, 5, 'Pagina ' . $this->PageNo() . '/{total_pages}', 0, 0, 'R');
    }
 
    // private function renderCabeceraTabla(array $header, array $colWidths)
@@ -158,6 +158,7 @@ class PDF extends FPDF
             $row['descripcion'],
             $row['promedio_historico'],
             $row['ultima_cantidad'],
+            '',
             $row['descripcion_categoria'],
             $row['cantidad']
          );

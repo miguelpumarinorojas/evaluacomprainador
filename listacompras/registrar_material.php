@@ -39,13 +39,7 @@
 
         // Prepare and bind
         $stmt = $conn->prepare("INSERT INTO productos (codigo, descripcion, categoria,estado) VALUES (?, ?, ?, ?)");
-        if (!$stmt) {
-            error_log('[productos] Error al preparar INSERT desde registrar_material.php: ' . $conn->error);
-            echo "<script>alert('No se pudo preparar el registro del producto.'); window.location.href='index.php';</script>";
-            exit();
-        }
         $stmt->bind_param("ssii", $CodigoProducto, $NombreProducto, $CategoriaProducto, $estado);
-
         // Execute the statement
         if ($stmt->execute()) {
             error_log('[productos] INSERT realizado correctamente desde registrar_material.php. ID: ' . $conn->insert_id);
