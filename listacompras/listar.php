@@ -28,8 +28,8 @@ class PDF extends FPDF
       $this->fecha_impresion = date('d/m/Y H:i');
 
       // Definir cabecera y anchos de columnas
-      $this->header = array('N°', 'Producto', 'Categoría', 'Cantidad');
-      $this->colWidths = array(10, 100, 40, 30);
+      $this->header = array('N°', 'Producto', 'Prom. Hist.', 'Últ. Compra', 'Categoría', 'Cantidad');
+      $this->colWidths = array(10, 100, 20, 20, 25, 20);
    }
 
    // Cabecera de página
@@ -81,7 +81,7 @@ class PDF extends FPDF
    function ChapterBody($mes_compra)
    {
 
-   include("../inc/connection.php");
+      include("../inc/connection.php");
 
       // $servidor = "localhost";
       // $usuario = "root";
@@ -99,25 +99,47 @@ class PDF extends FPDF
 
       if ($result_1->num_rows > 0) {
          $query = "SELECT 
-                        p.id,
-                        p.descripcion,
-                        c.icono,
-                        c.descripcion AS descripcion_categoria,
-                        IFNULL(l.cantidad, '') AS cantidad,
-                        IFNULL(l.estado, '') AS estado
-                    FROM productos p
-                    INNER JOIN categorias c ON p.categoria = c.id
-                    LEFT JOIN lista_compras_mensual l 
-                        ON p.id = l.producto 
-                        AND l.mes_compra = '$mes_compra'
-                    WHERE p.estado = 1
-                    ORDER BY c.descripcion, p.descripcion;";
+                            p.id,
+                            p.descripcion,
+                            c.icono,
+                            c.descripcion AS descripcion_categoria,
+                            IFNULL(compra_promedio.promedio_historico, '') AS promedio_historico,
+                            IFNULL(ultima_compra.cantidad_compra, '') AS ultima_cantidad,
+                            IFNULL(l.cantidad, '') AS cantidad,
+                            IFNULL(l.estado, '') AS estado
+                        FROM productos p
+                        INNER JOIN categorias c ON p.categoria = c.id
+                        LEFT JOIN lista_compras_mensual l 
+                            ON p.id = l.producto 
+                            AND l.mes_compra = '$fecha_cotizacion'
+                        LEFT JOIN (SELECT producto, round(AVG(cantidad_compra)) AS promedio_historico 
+                            FROM lista_compras
+                            GROUP BY producto) AS compra_promedio ON p.id = compra_promedio.producto
+                        LEFT JOIN (SELECT producto, cantidad_compra
+                                FROM lista_compras
+                                WHERE fecha_cotizacion = (SELECT MAX(fecha_cotizacion) FROM lista_compras)) AS ultima_compra ON p.id = ultima_compra.producto
+                        WHERE p.estado = 1
+                        ORDER BY c.descripcion, p.descripcion;";
       } else {
-         $query = "SELECT DISTINCT t1.id, t1.descripcion,t3.icono,t3.descripcion as descripcion_categoria, '' as cantidad, '' as estado
-                    FROM productos t1 
-                    INNER JOIN categorias t3 on t1.categoria = t3.id
-                    WHERE t1.estado = 1
-                    ORDER BY t3.descripcion, t1.descripcion";
+         $query = "SELECT DISTINCT 
+                            t1.id, 
+                            t1.descripcion,
+                            t3.icono,
+                            t3.descripcion as descripcion_categoria, 
+                            '' as cantidad, 
+                            '' as estado,
+                            IFNULL(compra_promedio.promedio_historico, '') AS promedio_historico,
+                            IFNULL(ultima_compra.cantidad_compra, '') AS ultima_cantidad
+                        FROM productos t1 
+                        INNER JOIN categorias t3 on t1.categoria = t3.id
+                        LEFT JOIN (SELECT producto, round(AVG(cantidad_compra)) AS promedio_historico 
+                            FROM lista_compras
+                            GROUP BY producto) AS compra_promedio ON t1.id = compra_promedio.producto
+                        LEFT JOIN (SELECT producto, cantidad_compra
+                                FROM lista_compras
+                                WHERE fecha_cotizacion = (SELECT MAX(fecha_cotizacion) FROM lista_compras)) AS ultima_compra ON t1.id = ultima_compra.producto
+                        WHERE t1.estado = 1
+                        ORDER BY t3.descripcion, t1.descripcion";
       }
 
       $resultado = $conn->query($query);
@@ -134,6 +156,8 @@ class PDF extends FPDF
          $values = array(
             $numero++,
             $row['descripcion'],
+            $row['promedio_historico'],
+            $row['ultima_cantidad'],
             $row['descripcion_categoria'],
             $row['cantidad']
          );
