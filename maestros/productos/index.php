@@ -25,10 +25,14 @@ session_variable('../../');
 <body>
     <?php
 
-    if (isset($_POST['btnRegistrar']) && !empty($_POST['CodigoProducto']) && !empty($_POST['DescripcionProducto'])) {
+    if (isset($_POST['btnRegistrar'])) {
+        error_log('[productos] Intento de registro: descripcion=' . ($_POST['DescripcionProducto'] ?? '') . ', categoria=' . ($_POST['CategoriaProducto'] ?? ''));
+    }
+
+    if (isset($_POST['btnRegistrar']) && !empty($_POST['DescripcionProducto'])) {
         $codigoProducto = '0';
         $descripcionProducto = $_POST['DescripcionProducto'];
-        $categoriaProducto = $_POST['CategoriaProducto'];
+        $categoriaProducto = $_POST['CategoriaProducto'] ?? '';
         // Aquí puedes realizar la lógica para guardar el producto en la base de datos o realizar otras acciones necesarias. 
         // $conn = new mysqli("localhost", "root", "", "evaluacomprainador");
         if ($conn->connect_error) {
@@ -52,17 +56,34 @@ session_variable('../../');
 
             $estadoProducto = 1; // Asignar un valor predeterminado para el estado del producto
             $stmt = $conn->prepare("INSERT INTO productos (codigo, descripcion, categoria, estado) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssii", $codigoProducto, $descripcionProducto, $categoriaProducto, $estadoProducto);
-            $stmt->execute();
-            $stmt->close();
-            $conn->close();
-
-
-        ?>
-            <div class='alert alert-success notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
-                Producto <?php echo $codigoProducto . " - " . $descripcionProducto; ?> registrado exitosamente! <span class="material-icons align-bottom">done</span>
-            </div>
-    <?php }
+            if (!$stmt) {
+                error_log('[productos] Error al preparar INSERT: ' . $conn->error);
+                $conn->close();
+                ?>
+                <div class='alert alert-danger notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
+                    No se pudo preparar el registro del producto.
+                </div>
+            <?php } else {
+                $stmt->bind_param("ssii", $codigoProducto, $descripcionProducto, $categoriaProducto, $estadoProducto);
+                if (!$stmt->execute()) {
+                    error_log('[productos] Error al ejecutar INSERT: ' . $stmt->error);
+                    $stmt->close();
+                    $conn->close();
+                    ?>
+                    <div class='alert alert-danger notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
+                        No se pudo registrar el producto.
+                    </div>
+                <?php } else {
+                    error_log('[productos] INSERT realizado correctamente. ID: ' . $conn->insert_id);
+                    $stmt->close();
+                    $conn->close();
+                    ?>
+                    <div class='alert alert-success notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
+                        Producto <?php echo $codigoProducto . " - " . $descripcionProducto; ?> registrado exitosamente! <span class="material-icons align-bottom">done</span>
+                    </div>
+                <?php }
+            }
+        }
     }
 
 
