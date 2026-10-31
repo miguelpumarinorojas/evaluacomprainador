@@ -10,47 +10,47 @@ $invalidPassword = false;
 $invalidEmail = false;
 
 if (isset($_POST['BTN_LOGIN'])) {
-    $username = $_POST['MAIL_USUARIO'];
-    $password = md5($_POST['PASSWORD_USUARIO']);
-    $resultado = '';
+  $username = $_POST['MAIL_USUARIO'];
+  $password = md5($_POST['PASSWORD_USUARIO']);
+  $resultado = '';
 
-    // Valida si usuario está habilitado
-    $query_val_login = "SELECT * FROM usuarios WHERE email = ? AND estado = 1";
-    $stmt = $conn->prepare($query_val_login);
+  // Valida si usuario está habilitado
+  $query_val_login = "SELECT * FROM usuarios WHERE email = ? AND estado = 1";
+  $stmt = $conn->prepare($query_val_login);
+  $stmt->bind_param("s", $username);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  if ($result->num_rows === 0) {
+    $invalidEmail = true;
+  } else {
+    // Obtiene datos del usuario
+    $sql = "SELECT nombre, email, perfil, password FROM usuarios WHERE email = ?";
+    $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $user = $stmt->get_result()->fetch_assoc();
 
-    if ($result->num_rows === 0) {
-        $invalidEmail = true;
+    if ($user && $password === $user['password']) {
+      $_SESSION['loggedin'] = true;
+      $_SESSION['start'] = time();
+      $_SESSION['expire'] = $_SESSION['start'] + (100 * 120);
+      $_SESSION['nombre'] = $user['nombre'];
+      $_SESSION['email'] = $user['email'];
+      $_SESSION['perfil'] = $user['perfil'];
+      $_SESSION['timeout'] = time();
+
+      if ($_SESSION['perfil'] == 3) {
+        // 🚨 Importante: redirigir ANTES de enviar HTML
+        header("Location: ../listacompras/index.php?mes_compra=$mes_compra");
+      } else {
+        header("Location: ../index.php");
+      }
+      exit;
     } else {
-        // Obtiene datos del usuario
-        $sql = "SELECT nombre, email, perfil, password FROM usuarios WHERE email = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $user = $stmt->get_result()->fetch_assoc();
-
-        if ($user && $password === $user['password']) {
-            $_SESSION['loggedin'] = true;
-            $_SESSION['start'] = time();
-            $_SESSION['expire'] = $_SESSION['start'] + (100 * 120);
-            $_SESSION['nombre'] = $user['nombre'];
-            $_SESSION['email'] = $user['email'];
-            $_SESSION['perfil'] = $user['perfil'];
-            $_SESSION['timeout'] = time();
-
-          if($_SESSION['perfil'] == 3){
-            // 🚨 Importante: redirigir ANTES de enviar HTML
-            header("Location: ../listacompras/index.php?mes_compra=$mes_compra");
-          } else {
-            header("Location: ../index.php");
-          }
-            exit;
-        } else {
-            $invalidPassword = true;
-        }
+      $invalidPassword = true;
     }
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -100,16 +100,55 @@ if (isset($_POST['BTN_LOGIN'])) {
       /* must be equal to or larger than .modal */
       opacity: 0.8;
     }
+
+    .google-login-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      color: #3c4043;
+      background-color: #ffffff;
+      border-color: #dadce0;
+      font-weight: 500;
+    }
+
+    .google-login-btn:hover,
+    .google-login-btn:focus {
+      color: #202124;
+      background-color: #f8fafd;
+      border-color: #c6c9cc;
+    }
+
+    .google-login-btn:focus {
+      box-shadow: 0 0 0 0.25rem rgba(66, 133, 244, 0.25);
+    }
+
+    .google-login-icon {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+    }
   </style>
 </head>
 
 <body>
-   <?php if ($status == 'inactive'): ?>
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-  <strong>Sesión finalizada:</strong> Has estado inactivo demasiado tiempo. Por favor inicia sesión nuevamente.
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-<?php endif; ?>
+  <?php if ($status == 'inactive'): ?>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Sesión finalizada:</strong> Has estado inactivo demasiado tiempo. Por favor inicia sesión nuevamente.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <?php endif; ?>
+  <?php if ($status === 'google_user_not_allowed'): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      Tu cuenta de Google no está registrada o está inactiva.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <?php elseif ($status === 'google_error'): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      No fue posible iniciar sesión con Google. Inténtalo nuevamente.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <?php endif; ?>
   <div class="login-card text-center">
     <img src="../img/evaluacomprainador.png" alt="Logo Evaluacomprainador" class="login-logo" width="100%">
     <form class="needs-validation" action="login.php" method="POST" autocomplete="off" novalidate>
@@ -139,6 +178,19 @@ if (isset($_POST['BTN_LOGIN'])) {
         </span>
       </div>
       <button type="submit" name="BTN_LOGIN" class="btn btn-primary w-100">Ingresar</button>
+
+      <div class="my-3 text-muted"></div>
+
+      <a href="google-login.php" class="btn google-login-btn w-100">
+        <svg class="google-login-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+          <path fill="#4285F4" d="M17.64 9.205c0-.638-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.715v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.613Z"/>
+          <path fill="#34A853" d="M9 18c2.43 0 4.468-.806 5.956-2.182l-2.908-2.258c-.806.54-1.835.86-3.048.86-2.345 0-4.332-1.584-5.044-3.714H.95v2.332A9 9 0 0 0 9 18Z"/>
+          <path fill="#FBBC05" d="M3.956 10.706A5.41 5.41 0 0 1 3.673 9c0-.593.102-1.17.283-1.706V4.962H.95A9 9 0 0 0 0 9c0 1.453.348 2.827.95 4.038l3.006-2.332Z"/>
+          <path fill="#EA4335" d="M9 3.58c1.322 0 2.508.454 3.442 1.345l2.582-2.582C13.464.892 11.426 0 9 0A9 9 0 0 0 .95 4.962l3.006 2.332C4.668 5.164 6.655 3.58 9 3.58Z"/>
+        </svg>
+        Continuar con Google
+      </a>
+
     </form>
 
 

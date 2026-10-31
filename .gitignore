@@ -2,6 +2,7 @@
 BACKUPS/
 login/conexion.php
 inc/connection.php
+login/google-config.php
 evaluacomprainador.code-workspace
 evaluacomprainador.zip
 more_results()
