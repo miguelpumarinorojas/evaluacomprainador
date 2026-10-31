@@ -22,7 +22,7 @@ $params = [
     'client_id' => $clientId,
     'redirect_uri' => $redirectUri,
     'response_type' => 'code',
-    'scope' => 'openid email profile',
+    'scope' => 'email profile',
     'access_type' => 'online',
     'prompt' => 'select_account',
 ];
