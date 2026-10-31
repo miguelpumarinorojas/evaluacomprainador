@@ -79,7 +79,7 @@ session_variable('../../');
                     $conn->close();
                     ?>
                     <div class='alert alert-success notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
-                        Producto <?php echo $codigoProducto . " - " . $descripcionProducto; ?> registrado exitosamente! <span class="material-icons align-bottom">done</span>
+                        <?php echo $descripcionProducto; ?> registrado exitosamente! <span class="material-icons align-bottom">done</span>
                     </div>
                 <?php }
             }
