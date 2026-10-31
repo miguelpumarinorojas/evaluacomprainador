@@ -39,19 +39,19 @@ session_variable('../../');
             die("Conexión fallida: " . $conn->connect_error);
         }
 
-        $validarCodigo = $conn->prepare("SELECT * FROM productos WHERE codigo = ?");
-        $validarCodigo->bind_param("s", $codigoProducto);
-        $validarCodigo->execute();
-        $resultado = $validarCodigo->get_result();
-        if ($resultado->num_rows > 0) {
-            $validarCodigo->close();
-            $conn->close();
+        // $validarCodigo = $conn->prepare("SELECT * FROM productos WHERE codigo = ?");
+        // $validarCodigo->bind_param("s", $codigoProducto);
+        // $validarCodigo->execute();
+        // $resultado = $validarCodigo->get_result();
+        // if ($resultado->num_rows > 0) {
+        //     $validarCodigo->close();
+        //     $conn->close();
     ?>
-            <div class='alert alert-danger notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
+            <!-- <div class='alert alert-danger notification alert-dismissible fade show text-center' role='alert' id='success-alert-v2'>
                 El producto <?php echo $codigoProducto; ?> ya se encuentra registrado! <span class="material-icons align-bottom">error</span>
-            </div>
-        <?php } else {
-            $validarCodigo->close();
+            </div> -->
+        <?php //} else {
+            //$validarCodigo->close();
 
 
             $estadoProducto = 1; // Asignar un valor predeterminado para el estado del producto
@@ -84,7 +84,7 @@ session_variable('../../');
                 <?php }
             }
         }
-    }
+   // }
 
 
 

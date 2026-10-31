@@ -179,7 +179,7 @@ if (isset($_POST['BTN_LOGIN'])) {
       </div>
       <button type="submit" name="BTN_LOGIN" class="btn btn-primary w-100">Ingresar</button>
 
-      <div class="my-3 text-muted"></div>
+      <!-- <div class="my-3 text-muted"></div>
 
       <a href="google-login.php" class="btn google-login-btn w-100">
         <svg class="google-login-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
@@ -189,7 +189,7 @@ if (isset($_POST['BTN_LOGIN'])) {
           <path fill="#EA4335" d="M9 3.58c1.322 0 2.508.454 3.442 1.345l2.582-2.582C13.464.892 11.426 0 9 0A9 9 0 0 0 .95 4.962l3.006 2.332C4.668 5.164 6.655 3.58 9 3.58Z"/>
         </svg>
         Continuar con Google
-      </a>
+      </a> -->
 
     </form>
 
